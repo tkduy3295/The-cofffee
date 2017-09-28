@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/highlight"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+
+        <ImageView
+            android:id="@+id/imageMenuOfCategories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/tvNameMenuOfCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TÊN MÓN"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="26dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                />
+
+            <TextView
+                android:id="@+id/tvDescriptionMenuOfCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="xxx"
+                android:textSize="16dp"
+                />
+            <TextView
+                android:id="@+id/tvPriceMenuOfCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="35.000 VND"
+                android:layout_gravity="right"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1px"-->
+                <!--android:background="@color/primary"-->
+                <!--/>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/btnOrderMenuOfCategories"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="25dp"-->
+                <!--android:background="@drawable/buttonmenu"-->
+                <!--android:layout_gravity="right"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:layout_marginBottom="15dp"-->
+                <!--/>-->
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

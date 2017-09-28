@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:weightSum="10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+
+        <ImageView
+            android:id="@+id/imagePayment"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:layout_weight="3"
+            />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvNamePayment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cafe sua"
+                android:textSize="24dp"
+                android:textColor="?attr/colorPrimary"/>
+            <LinearLayout
+                android:weightSum="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:id="@+id/tvPricePayment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="25.000 d"
+                    android:textSize="16dp"
+                    android:layout_marginTop="2dp"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnQualityPayment"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/buttonquality"
+                        android:text="1"
+                        android:textColor="#757575"
+                        android:clickable = "false"
+                        />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvMoneyPayment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="50.000 d"
+                    android:gravity="right"
+                    android:textSize="16dp"
+                    android:layout_marginTop="2dp"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/highlight" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+
+
