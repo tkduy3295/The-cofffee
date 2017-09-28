@@ -1,5 +1,6 @@
 package com.echessa.designdemo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.echessa.designdemo.DBUtils.Ordered;
 import com.echessa.designdemo.fragment.CategoriesFragment;
 import com.echessa.designdemo.fragment.FavoriteFragment;
 import com.echessa.designdemo.fragment.MenuOfCategoriesFragment;
@@ -52,6 +54,8 @@ public class MenuTabsActivity extends AppCompatActivity{
         // set Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
 
 
@@ -126,7 +130,11 @@ public class MenuTabsActivity extends AppCompatActivity{
 //
 //                trans.commit();
 //            }
+            /*Intent intent = new Intent(MenuTabsActivity.this,MainActivity.class);
+            startActivity(intent);*/
                 this.finish();
+
+
         }
         return true;
 

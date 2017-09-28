@@ -40,16 +40,30 @@
                 android:ellipsize="end"
                 />
 
-            <Button
-                android:id="@+id/btnQuatityFavorite"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/buttonquality"
-                android:textColor="#757575"
-                android:clickable = "false"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                />
-            <!--android:visibility="gone"-->
+                >
+
+                <ImageView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_shop"
+                    android:tint="@color/primary"
+                    android:layout_marginTop="5px"
+                    />
+                <TextView
+                    android:id="@+id/tvQualityFavorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="8px"
+                    />
+
+            </LinearLayout>
+
 
 
             <LinearLayout
@@ -66,7 +80,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/iconFavorite"
+
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:src="@drawable/ic_favorite"
@@ -83,6 +97,10 @@
                         />
 
                 </LinearLayout>
+
+
+
+
 
 
                 <TextView

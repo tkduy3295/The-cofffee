@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import com.echessa.designdemo.DBUtils.Ordered;
 import com.echessa.designdemo.DBUtils.Position;
 import com.echessa.designdemo.DBUtils.SizeTable;
 import com.echessa.designdemo.DBUtils.Table;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private int _yDelta;
 
     private List<Table> tableList ;
+
+    private List<String> listOrder = new ArrayList<String>();
 
 
 
@@ -168,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
 //            layoutParams.bottomMargin = 0;
 //            layoutParams.rightMargin = 0;
 
+
                     if(getTable.getReceiptId().equals("")){
                         creatTable.setBackgroundResource(R.color.white);
                     }else if(getTable.getReceiptId().equals("1")){
@@ -179,13 +185,30 @@ public class MainActivity extends AppCompatActivity {
 
                     root.addView(creatTable);
 
+
                     creatTable.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             String statusTableCurent = getTable.getReceiptId();
-                            Intent intent;
+
+                            Intent intent ;
                             if(statusTableCurent.equals("")){
+                                Bundle bundle = new Bundle();
+
+                                String idTable  ="2";
+                                String statusTable ="0";
+                                List<Ordered> orderedListTable = new ArrayList<Ordered>();
+                                orderedListTable.add(new Ordered("Ga","25000 đ",1));
+
+
+                                bundle.putString("idTable",idTable);
+                                bundle.putString("statusTable",statusTable);
+                                bundle.putSerializable("orderedListTable", (Serializable) orderedListTable);
+
                                 intent = new Intent(MainActivity.this, MenuTabsActivity.class);
+
+                                intent.putExtra("bundleTable",bundle);
+
                                 startActivity(intent);
                             }else if(statusTableCurent.equals("1")){
                                 intent = new Intent(MainActivity.this, PaymentActivity.class);
@@ -194,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    creatTable.setOnTouchListener(new View.OnTouchListener() {
+                    /*creatTable.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
 
@@ -218,8 +241,8 @@ public class MainActivity extends AppCompatActivity {
                                     layoutParams.leftMargin = X - _xDelta;
                                     layoutParams.topMargin = Y - _yDelta;
 
-                                    /*layoutParams.rightMargin = -250;
-                                    layoutParams.bottomMargin = -250;*/
+                                    *//*layoutParams.rightMargin = -250;
+                                    layoutParams.bottomMargin = -250;*//*
                                     v.setLayoutParams(layoutParams);
 
 
@@ -228,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
                             root.invalidate();
                             return false;
                         }
-                    });
+                    });*/
                 }
 
 

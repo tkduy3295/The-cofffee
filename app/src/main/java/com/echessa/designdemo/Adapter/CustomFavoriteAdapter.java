@@ -2,9 +2,12 @@ package com.echessa.designdemo.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.echessa.designdemo.DBUtils.Favorite;
+import com.echessa.designdemo.DBUtils.Ordered;
+import com.echessa.designdemo.MainActivity;
 import com.echessa.designdemo.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -74,17 +80,11 @@ public class CustomFavoriteAdapter extends BaseAdapter  {
 
             viewHolder.tvNameFavorite = (TextView) view.findViewById(R.id.tvNameFavorite);
 
-            viewHolder.btnQuatityFavorite = (Button) view.findViewById(R.id.btnQuatityFavorite);
+            viewHolder.tvQualityFavorite = (TextView) view.findViewById(R.id.tvQualityFavorite);
 
             viewHolder.tvPriceFavorite = (TextView) view.findViewById(R.id.tvPriceFavorite);
 
             viewHolder.tvTotalFavorite = (TextView) view.findViewById(R.id.tvTotalFavorite);
-
-            /*viewHolder.btnSubFavorite = (Button) view.findViewById(R.id.btnSubFavorite);*/
-
-            /*viewHolder.btnQuatityFavorite = (Button) view.findViewById(R.id.btnQuatityFavorite);*/
-
-            /*viewHolder.btnPlusFavorite = (Button) view.findViewById(R.id.btnPlusFavorite);*/
 
             view.setTag(viewHolder);
 
@@ -103,10 +103,11 @@ public class CustomFavoriteAdapter extends BaseAdapter  {
         viewHolder.tvNameFavorite.setTypeface(mFont);
 
 
-        viewHolder.btnQuatityFavorite.setText(""+0);
+
 
         viewHolder.tvTotalFavorite.setText(""+favorite.getTotalOrder());
 
+        viewHolder.tvQualityFavorite.setText(""+favorite.getQuatity());
 
 
 
@@ -115,45 +116,8 @@ public class CustomFavoriteAdapter extends BaseAdapter  {
         viewHolder.tvPriceFavorite.setText(""+price+" đ");
         /*viewHolder.tvPriceFavorite.setTypeface(mFont);*/
 
-        /*viewHolder.btnQuatityFavorite.setText(""+quatityFavorite);*/
 
 
-
-
-
-
-
-
-        /*viewHolder.btnPlusFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                quatityFavorite = Integer.parseInt(viewHolder.btnQuatityFavorite.getText().toString())+1;
-                Toast.makeText(v.getContext(),""+quatityFavorite,Toast.LENGTH_SHORT).show();
-                viewHolder.btnQuatityFavorite.setText(""+quatityFavorite);
-                viewHolder.btnQuatityFavorite.setVisibility(View.VISIBLE);
-                viewHolder.btnSubFavorite.setVisibility(View.VISIBLE);
-
-
-
-
-                viewHolder.btnSubFavorite.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        quatityFavorite = Integer.parseInt(viewHolder.btnQuatityFavorite.getText().toString())-1;
-                        Toast.makeText(v.getContext(),""+quatityFavorite,Toast.LENGTH_SHORT).show();
-                        if(quatityFavorite == 0){
-                            viewHolder.btnQuatityFavorite.setVisibility(View.INVISIBLE);
-                            viewHolder.btnSubFavorite.setVisibility(View.INVISIBLE);
-                            viewHolder.btnQuatityFavorite.setText(""+0);
-
-                        }else{
-                            viewHolder.btnQuatityFavorite.setText(""+quatityFavorite);
-                        }
-                    }
-                });
-            }
-        });*/
 
 
 
@@ -163,15 +127,10 @@ public class CustomFavoriteAdapter extends BaseAdapter  {
     private class ViewHolder{
         ImageView imageFavorite;
         TextView tvNameFavorite;
-        /*TextView tvDescriptionFavorite;*/
-        Button btnQuatityFavorite;
+        TextView tvQualityFavorite;
         TextView tvPriceFavorite;
-
         TextView tvTotalFavorite;
 
-        /*Button btnSubFavorite;
-        Button btnQuatityFavorite;
-        Button btnPlusFavorite;*/
 
     }
 }

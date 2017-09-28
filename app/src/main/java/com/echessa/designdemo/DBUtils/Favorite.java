@@ -12,14 +12,16 @@ public class Favorite {
     private int createAt;
     private String urlImage;
     private int totalOrder;
+    private int quatity;
 
-    public Favorite(String id, String name, int price, int createAt, String urlImage, int totalOrder) {
+    public Favorite(String id, String name, int price, int createAt, String urlImage, int totalOrder, int quatity) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.createAt = createAt;
         this.urlImage = urlImage;
         this.totalOrder = totalOrder;
+        this.quatity = quatity;
     }
 
     public String getId() {
@@ -68,5 +70,13 @@ public class Favorite {
 
     public void setTotalOrder(int totalOrder) {
         this.totalOrder = totalOrder;
+    }
+
+    public int getQuatity() {
+        return quatity;
+    }
+
+    public void setQuatity(int quatity) {
+        this.quatity = quatity;
     }
 }
