@@ -8,10 +8,10 @@ import java.io.Serializable;
 
 public class Ordered implements Serializable {
     private String name;
-    private String price;
+    private int price;
     private int quatity;
 
-    public Ordered(String name, String price, int quatity) {
+    public Ordered(String name, int price, int quatity) {
         this.name = name;
         this.price = price;
         this.quatity = quatity;
@@ -25,11 +25,11 @@ public class Ordered implements Serializable {
         this.name = name;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

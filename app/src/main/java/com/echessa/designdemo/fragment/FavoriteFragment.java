@@ -32,6 +32,7 @@ import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class FavoriteFragment extends Fragment {
 
     private TextView tvQualityFavorite;
 
-    private int quatityOrderCurrent=1;
+    private int quatityOrderNew=1;
 
 
 
@@ -152,6 +153,7 @@ public class FavoriteFragment extends Fragment {
                 }
 
 
+
                 customFavoriteAdapter = new CustomFavoriteAdapter(getActivity(), favoriteList);
 
                 gvFavorite.setAdapter(customFavoriteAdapter);
@@ -159,44 +161,82 @@ public class FavoriteFragment extends Fragment {
 
                 final List<Integer> listPositionOrder = new ArrayList<Integer>();
 
+                /*final List<Ordered> orderedList = new ArrayList<Ordered>();*/
+
+                Intent intent = getActivity().getIntent();
+
+                final Bundle bundleTable = intent.getBundleExtra("bundleTable");
+
+                final List<Ordered> orderedListTable = (List<Ordered>) bundleTable.getSerializable("orderedListTable");
+
 
                 gvFavorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        Intent intent = getActivity().getIntent();
+                        /*Intent intent = getActivity().getIntent();
                         final Bundle bundleTable = intent.getBundleExtra("bundleTable");
                         final List<Ordered> orderedListTable = (List<Ordered>) bundleTable.getSerializable("orderedListTable");
                         if(bundleTable!=null){
 
                             bundleTable.putString("statusTable","1");
-                            /*String name = viewHolder.tvNameFavorite.getText().toString();
+                            *//*String name = viewHolder.tvNameFavorite.getText().toString();
                             String price = viewHolder.tvPriceFavorite.getText().toString();
                             int quatity = Integer.parseInt(viewHolder.tvQualityFavorite.getText().toString());
-                            orderedListTable.add(new Ordered(name,price, quatity));*/
+                            orderedListTable.add(new Ordered(name,price, quatity));*//*
 
-                           /* Log.v("AAA",""+name+" - "+price+" - "+ quatity +" - "+orderedListTable.size());
-*/
+                           *//* Log.v("AAA",""+name+" - "+price+" - "+ quatity +" - "+orderedListTable.size());
+*//*
 
                         }else{
                             Log.v("AAA","null roi!!!");
-                        }
+                        }*/
 
+                        quatityOrderNew = favoriteList.get(position).getQuatity()+1;
+                        favoriteList.get(position).setQuatity(quatityOrderNew);
 
-                        /*quatityOrderCurrent = favoriteList.get(position).getQuatity()+1;
-                        favoriteList.get(position).setQuatity(quatityOrderCurrent);
                         favoriteList.set(position,favoriteList.get(position));
                         customFavoriteAdapter.notifyDataSetChanged();
 
-                        if(checkPosition(position, listPositionOrder) == true){
+                        if(checkBoolPosition(position, listPositionOrder) == true){
+
+                            String name = favoriteList.get(position).getName();
+                            int price = favoriteList.get(position).getPrice();
+                            int quatity = favoriteList.get(position).getQuatity();
+
+                            orderedListTable.add(new Ordered(name,price,quatity));
 
                             listPositionOrder.add(position);
+                        }else{
+                            int positionTrung =  checkPosition(position, listPositionOrder);
+
+                            orderedListTable.get(positionTrung).setQuatity(orderedListTable.get(positionTrung).getQuatity()+1);
 
                         }
-                        Log.v("AAA",""+listPositionOrder.size());
-*/
+
+
+
+                        /*for (int t = 0;t<listPositionOrder.size();t++){
+                            Log.v("AAAB",""+listPositionOrder.get(t)+"\n");
+                        }
+
+                        for (int t = 0;t<orderedListTable.size();t++){
+                            Log.v("AAA",""+orderedListTable.get(t).getQuatity()+"\n");
+                        }*/
+
+                        bundleTable.putString("statusTable","1");
+                        bundleTable.putSerializable("orderedListTable", (Serializable) orderedListTable);
+
+                        List<Ordered> demo = (List<Ordered>) bundleTable.getSerializable("orderedListTable");
+
+                        for (int i = 0;i<demo.size();i++){
+                            Log.v("AAA",""+demo.get(i).getName()+"-"+demo.get(i).getQuatity());
+                        }
+
 
                     }
+
+
                 });
 
             } catch (Exception e) {
@@ -207,13 +247,22 @@ public class FavoriteFragment extends Fragment {
         }
     }
 
-    public boolean checkPosition(int positionCurrent, List<Integer> listPositionOrder){
+    public boolean checkBoolPosition(int positionCurrent, List<Integer> listPositionOrder){
         for (int k=0;k<listPositionOrder.size();k++){
             if(positionCurrent==listPositionOrder.get(k)) {
                 return false;
             }
         }
         return true;
+    }
+
+    public int checkPosition(int positionCurrent, List<Integer> listPositionOrder){
+        for (int k=0;k<listPositionOrder.size();k++){
+            if(positionCurrent==listPositionOrder.get(k)) {
+                return k;
+            }
+        }
+        return 0;
     }
 
     public void toast(String msg){

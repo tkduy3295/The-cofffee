@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                                 String idTable  ="2";
                                 String statusTable ="0";
                                 List<Ordered> orderedListTable = new ArrayList<Ordered>();
-                                orderedListTable.add(new Ordered("Ga","25000 đ",1));
+                                /*orderedListTable.add(new Ordered("Ga",25000,1));*/
 
 
                                 bundle.putString("idTable",idTable);
