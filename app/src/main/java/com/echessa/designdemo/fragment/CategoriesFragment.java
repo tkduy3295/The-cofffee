@@ -56,6 +56,35 @@ public class CategoriesFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
         lvCategories = (ListView) view.findViewById(R.id.lvCategories);
+        lvCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View v, int position, long l) {
+
+
+
+
+                Bundle bundleIdCategories = new Bundle();
+                bundleIdCategories.putString("idCategories","ahihi");
+
+
+                Fragment menuOfCategoriesFragment = new MenuOfCategoriesFragment();
+
+                menuOfCategoriesFragment.setArguments(bundleIdCategories);
+                menuOfCategoriesFragment.setArguments(bundleIdCategories);
+
+
+
+
+                FragmentTransaction trans = getFragmentManager().beginTransaction();
+                trans.replace(R.id.frame_root, new MenuOfCategoriesFragment());
+//                trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//                trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//                trans.addToBackStack(null);
+
+                trans.commit();
+
+            }
+        });
 
 
 
@@ -63,21 +92,7 @@ public class CategoriesFragment extends Fragment {
 
         new ReadJsonCategories().execute("https://cappuccino-hello.herokuapp.com/api/menu/category/");
 
-        lvCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View v, int position, long l) {
 
-
-                FragmentTransaction trans = getFragmentManager()
-                                .beginTransaction();
-
-                        trans.replace(R.id.frame_root, new MenuOfCategoriesFragment());
-                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                        trans.addToBackStack(null);
-
-                        trans.commit();
-                    }
-                });
 
 
         return view;

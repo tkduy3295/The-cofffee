@@ -40,8 +40,6 @@ public class CustomFavoriteAdapter extends BaseAdapter  {
 
     private List<Favorite> favoriteList;
 
-    /*private int quatityFavorite = 0;*/
-
 
 
     public CustomFavoriteAdapter(Context context, List<Favorite> favoriteList) {
@@ -80,6 +78,8 @@ public class CustomFavoriteAdapter extends BaseAdapter  {
 
             viewHolder.tvNameFavorite = (TextView) view.findViewById(R.id.tvNameFavorite);
 
+            viewHolder.tvDescriptionFavorite = (TextView) view.findViewById(R.id.tvDescriptionFavorite);
+
             viewHolder.tvQualityFavorite = (TextView) view.findViewById(R.id.tvQualityFavorite);
 
             viewHolder.tvPriceFavorite = (TextView) view.findViewById(R.id.tvPriceFavorite);
@@ -101,6 +101,8 @@ public class CustomFavoriteAdapter extends BaseAdapter  {
 
         viewHolder.tvNameFavorite.setText(favorite.getName());
         viewHolder.tvNameFavorite.setTypeface(mFont);
+
+        viewHolder.tvDescriptionFavorite.setText(favorite.getDescription());
 
 
 
@@ -127,6 +129,7 @@ public class CustomFavoriteAdapter extends BaseAdapter  {
     private class ViewHolder{
         ImageView imageFavorite;
         TextView tvNameFavorite;
+        TextView tvDescriptionFavorite;
         TextView tvQualityFavorite;
         TextView tvPriceFavorite;
         TextView tvTotalFavorite;

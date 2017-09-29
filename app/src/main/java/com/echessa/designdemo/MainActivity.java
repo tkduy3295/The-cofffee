@@ -19,6 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.echessa.designdemo.DBUtils.Ordered;
 import com.echessa.designdemo.DBUtils.Position;
 import com.echessa.designdemo.DBUtils.SizeTable;
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> listOrder = new ArrayList<String>();
 
-
+    String url = "https://cappuccino-hello.herokuapp.com/api/table/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,192 +80,171 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        tableList = new ArrayList<Table>();
 
-        new ReadJsonTable().execute("https://cappuccino-hello.herokuapp.com/api/table/");
+        JsonObjectRequest jsonObjectRequest =new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray("response");
+                    for (int i=0;i<jsonArray.length();i++) {
 
+                        JSONObject itemMenu = jsonArray.getJSONObject(i);
 
-    }
-
-
-
-    private class ReadJsonTable extends AsyncTask<String,Void,String>{
-
-        StringBuilder content = new StringBuilder();
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                URL url = new URL(strings[0]);
-
-                InputStreamReader inputStreamReader = new InputStreamReader(url.openConnection().getInputStream());
-
-                BufferedReader bufferedReader =  new BufferedReader(inputStreamReader);
-
-                String line="";
-                while((line = bufferedReader.readLine())!= null){
-                    content.append(line);
-                }
-                bufferedReader.close();
+                        String id = itemMenu.getString("id");
+                        String name = itemMenu.getString("name");
+                        String receiptId = itemMenu.getString("receiptId");
+                        String createAt = itemMenu.getString("createAt");
 
 
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return content.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            try {
-
-                JSONObject jsonObjectTable = new JSONObject(s);
-
-                tableList = new ArrayList<Table>();
+                        JSONObject position = itemMenu.getJSONObject("position");
+                        int x = position.getInt("x");
+                        int y = position.getInt("y");
 
 
-                JSONArray response = jsonObjectTable.getJSONArray("response");
+                        JSONObject size = itemMenu.getJSONObject("size");
+                        int w = size.getInt("w");
+                        int h = size.getInt("h");
 
-
-                for (int i = 0 ; i < response.length() ; i++){
-                    JSONObject objectItem = response.getJSONObject(i);
-
-                    String id = objectItem.getString("id");
-
-                    String name = objectItem.getString("name");
-                    String receiptId = objectItem.getString("receiptId");
-                    String createAt = objectItem.getString("createAt");
-
-
-                    JSONObject position = objectItem.getJSONObject("position");
-
-
-                    int x = position.getInt("x");
-                    int y = position.getInt("y");
-
-
-                    JSONObject size = objectItem.getJSONObject("size");
-                    int w = size.getInt("w");
-                    int h = size.getInt("h");
-
-                    Table table = new Table(id,name,receiptId,createAt,new Position(x,y),new SizeTable(w,h));
-
-
-                    tableList.add(table);
-
-                }
-                for (int i = 0 ; i < tableList.size() ; i++){
-
-                    root = (ViewGroup) findViewById(R.id.root);
-
-                    creatTable = new Button(getBaseContext());
-
-                    final Table getTable = tableList.get(i);
-
-//                    creatTable.setId(Integer.parseInt(getTable.getId()));
-                    creatTable.setText(getTable.getName());
-                    creatTable.setTextColor(R.color.highlight);
-
-                    int widthTable = getTable.getSizeTable().getWidth()*200;
-                    int heightTable = getTable.getSizeTable().getHeight()*200;
-
-                    int positionX = getTable.getPosition().getX()*200;
-                    int positionY = getTable.getPosition().getY()*200;
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(widthTable,heightTable);
-                    layoutParams.leftMargin = positionX;
-                    layoutParams.topMargin = positionY;
-//            layoutParams.bottomMargin = 0;
-//            layoutParams.rightMargin = 0;
-
-
-                    if(getTable.getReceiptId().equals("")){
-                        creatTable.setBackgroundResource(R.color.white);
-                    }else if(getTable.getReceiptId().equals("1")){
-                        creatTable.setBackgroundResource(R.color.primary);
+                        Table table = new Table(id, name, receiptId, createAt, new Position(x, y), new SizeTable(w, h));
+                        tableList.add(table);
                     }
 
+                    for (int j = 0 ; j < tableList.size() ; j++){
 
-                    creatTable.setLayoutParams(layoutParams);
+                        root = (ViewGroup) findViewById(R.id.root);
 
-                    root.addView(creatTable);
+                        creatTable = new Button(getBaseContext());
+
+                        final Table getTable = tableList.get(j);
+
+//                          creatTable.setId(Integer.parseInt(getTable.getId()));
+                        creatTable.setText(getTable.getName());
+                        creatTable.setTextColor(R.color.highlight);
+
+                        int widthTable = getTable.getSizeTable().getWidth()*200;
+                        int heightTable = getTable.getSizeTable().getHeight()*200;
+
+                        int positionX = getTable.getPosition().getX()*200;
+                        int positionY = getTable.getPosition().getY()*200;
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(widthTable,heightTable);
+                        layoutParams.leftMargin = positionX;
+                        layoutParams.topMargin = positionY;
+//                      layoutParams.bottomMargin = 0;
+//                      layoutParams.rightMargin = 0;
 
 
-                    creatTable.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String statusTableCurent = getTable.getReceiptId();
-
-                            Intent intent ;
-                            if(statusTableCurent.equals("")){
-                                Bundle bundle = new Bundle();
-
-                                String idTable  ="2";
-                                String statusTable ="0";
-                                List<Ordered> orderedListTable = new ArrayList<Ordered>();
-                                /*orderedListTable.add(new Ordered("Ga",25000,1));*/
+                        if(getTable.getReceiptId().equals("")){
+                            creatTable.setBackgroundResource(R.color.white);
+                        }else if(getTable.getReceiptId().equals("1")){
+                            creatTable.setBackgroundResource(R.color.primary);
+                        }
 
 
-                                bundle.putString("idTable",idTable);
-                                bundle.putString("statusTable",statusTable);
-                                bundle.putSerializable("orderedListTable", (Serializable) orderedListTable);
+                        creatTable.setLayoutParams(layoutParams);
+
+                        root.addView(creatTable);
+
+
+                        creatTable.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            Intent intent;
+                            if(getTable.getReceiptId().equals("")){
 
                                 intent = new Intent(MainActivity.this, MenuTabsActivity.class);
 
-                                intent.putExtra("bundleTable",bundle);
+                                String idTable =getTable.getId();
+                                String getReceiptId = getTable.getReceiptId();
+
+                                intent.putExtra("idTable",idTable);
+                                intent.putExtra("getReceiptId",getReceiptId);
 
                                 startActivity(intent);
-                            }else if(statusTableCurent.equals("1")){
-                                intent = new Intent(MainActivity.this, PaymentActivity.class);
+                                /*Bundle bundleTable = new Bundle();
+
+                                String idTable =getTable.getId();
+                                intent = new Intent(MainActivity.this,MenuTabsActivity.class);
+                                intent.putExtra("idTable", idTable);
                                 startActivity(intent);
+
+                                String statusTable ="0";
+                                List<Ordered> orderedListTable = new ArrayList<Ordered>();
+                                orderedListTable.add(new Ordered("Ga",25000,1));
+
+
+                                bundleTable.putString("idTable",idTable);
+                                bundleTable .putString("statusTable",statusTable);
+                                bundleTable.putSerializable("orderedListTable", (Serializable) orderedListTable);
+
+                                intent = new Intent(MainActivity.this, MenuTabsActivity.class);
+
+                                intent.putExtra("bundleTable",bundleTable);
+
+                                startActivity(intent);*/
+                            }else if(getTable.getReceiptId().equals("1")){
+
+                            intent = new Intent(MainActivity.this, PaymentActivity.class);
+                            startActivity(intent);
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    /*creatTable.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
+                        /*creatTable.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
 
-                            final int X = (int) event.getRawX();
-                            final int Y = (int) event.getRawY();
-
-
-                            switch (event.getAction() & MotionEvent.ACTION_MASK) {
-
-                                case MotionEvent.ACTION_DOWN:
-                                    RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-                                    _xDelta = X - lParams.leftMargin;
-                                    _yDelta = Y - lParams.topMargin;
+                                final int X = (int) event.getRawX();
+                                final int Y = (int) event.getRawY();
 
 
-                                    break;
-                                case MotionEvent.ACTION_UP:
-                                    break;
-                                case MotionEvent.ACTION_MOVE:
-                                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-                                    layoutParams.leftMargin = X - _xDelta;
-                                    layoutParams.topMargin = Y - _yDelta;
+                                switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
-                                    *//*layoutParams.rightMargin = -250;
-                                    layoutParams.bottomMargin = -250;*//*
-                                    v.setLayoutParams(layoutParams);
+                                    case MotionEvent.ACTION_DOWN:
+                                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                                        _xDelta = X - lParams.leftMargin;
+                                        _yDelta = Y - lParams.topMargin;
 
 
-                                    break;
+                                        break;
+                                    case MotionEvent.ACTION_UP:
+                                        break;
+                                    case MotionEvent.ACTION_MOVE:
+                                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                                        layoutParams.leftMargin = X - _xDelta;
+                                        layoutParams.topMargin = Y - _yDelta;
+
+                                        layoutParams.rightMargin = -250;
+                                        layoutParams.bottomMargin = -250;
+                                        v.setLayoutParams(layoutParams);
+
+
+                                        break;
+                                }
+                                root.invalidate();
+                                return false;
                             }
-                            root.invalidate();
-                            return false;
-                        }
-                    });*/
+                        });*/
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getBaseContext(),error.toString(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
+
+
     }
+
 
 
     @Override

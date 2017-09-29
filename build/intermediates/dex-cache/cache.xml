@@ -100,5 +100,14 @@
         sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
         <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/constraint-layout-solver-1.0.2_feb870e9e0e9b606210bbbd5c00ff3af2e6d9694.jar" />
     </item>
+    <item
+        is-multidex="false"
+        jar="/home/sung/.android/build-cache/c9720ec04f89a2226247de49a674aa594cc735ed/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="2cd4b982617e544728de0782d718a58ce1b06e3f">
+        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_f69a68a0da631280f83d91e96105634915b93746.jar" />
+    </item>
 
 </items>

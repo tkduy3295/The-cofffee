@@ -1,8 +1,10 @@
 package com.echessa.designdemo.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,11 +41,30 @@ public class MenuOfCategoriesFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_menuofcategories,container,false);
 
 
+        Bundle bundleIdCategories = getArguments();
+        Log.v("CCC","aaaa");
+
+        if(bundleIdCategories ==  null){
+            Log.v("CCC ","null");
+        }else{
+            String AAA = bundleIdCategories.getString("idCategories");
+            Log.v("CCC ",AAA);
+        }
+
+        /*Intent intent = getActivity().getIntent();
+        Bundle bundleTable = intent.getBundleExtra("bundleTable");
+
+        Log.v("CCC ",bundleTable.getString("statusTable"));*/
 
 
-        gvMenuOfCategories = (GridView) view.findViewById(R.id.gvMenuOfCategories);
 
-        menuOfCategoriesList = new ArrayList<MenuOfCategories>();
+
+
+
+
+        /*gvMenuOfCategories = (GridView) view.findViewById(R.id.gvMenuOfCategories);
+
+        menuOfCategoriesList = new ArrayList<MenuOfCategories>();*/
 
         /*MenuOfCategories cafeda = new MenuOfCategories(1,"Cappucino Nóng", R.drawable.cafenong,"Cappuchino (hot)",45000);
 
@@ -79,7 +100,7 @@ public class MenuOfCategoriesFragment extends Fragment {
         menuOfCategoriesList.add(nuixao);
         menuOfCategoriesList.add(mixaotrung);*/
 
-        customMenuOfCategoriesAdapter = new CustomMenuOfCategoriesAdapter(view.getContext(), menuOfCategoriesList);
+        /*customMenuOfCategoriesAdapter = new CustomMenuOfCategoriesAdapter(view.getContext(), menuOfCategoriesList);
 
         gvMenuOfCategories.setAdapter(customMenuOfCategoriesAdapter);
 
@@ -88,7 +109,7 @@ public class MenuOfCategoriesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(view.getContext(),menuOfCategoriesList.get(position).getName(),Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
 
         return view;
