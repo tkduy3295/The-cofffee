@@ -158,31 +158,16 @@ public class MainActivity extends AppCompatActivity {
                                 String idTable =getTable.getId();
                                 String getReceiptId = getTable.getReceiptId();
 
+                                //checkFavorite = 1
+                                //checkMenuOfCategory = 0;
+                                String checkFavoriteOrMenuOfCategory = "1";
+
+
                                 intent.putExtra("idTable",idTable);
                                 intent.putExtra("getReceiptId",getReceiptId);
+                                intent.putExtra("checkFavoriteOrMenuOfCategory",checkFavoriteOrMenuOfCategory);
 
                                 startActivity(intent);
-                                /*Bundle bundleTable = new Bundle();
-
-                                String idTable =getTable.getId();
-                                intent = new Intent(MainActivity.this,MenuTabsActivity.class);
-                                intent.putExtra("idTable", idTable);
-                                startActivity(intent);
-
-                                String statusTable ="0";
-                                List<Ordered> orderedListTable = new ArrayList<Ordered>();
-                                orderedListTable.add(new Ordered("Ga",25000,1));
-
-
-                                bundleTable.putString("idTable",idTable);
-                                bundleTable .putString("statusTable",statusTable);
-                                bundleTable.putSerializable("orderedListTable", (Serializable) orderedListTable);
-
-                                intent = new Intent(MainActivity.this, MenuTabsActivity.class);
-
-                                intent.putExtra("bundleTable",bundleTable);
-
-                                startActivity(intent);*/
                             }else if(getTable.getReceiptId().equals("1")){
 
                             intent = new Intent(MainActivity.this, PaymentActivity.class);
@@ -219,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
                                         layoutParams.bottomMargin = -250;
                                         v.setLayoutParams(layoutParams);
 
-
                                         break;
                                 }
                                 root.invalidate();
@@ -235,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getBaseContext(),error.toString(),Toast.LENGTH_LONG).show();
+                toast(error.toString());
             }
         });
 

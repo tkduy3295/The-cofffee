@@ -11,14 +11,14 @@ public class Categories {
     private String name;
     private int createAt;
     private String urlImage;
-    private List<MenuOfCategories> menuOfCategories;
+    private List<String> listMenuOfCategory;
 
-    public Categories(String id, String name, int createAt, String urlImage, List<MenuOfCategories> menuOfCategories) {
+    public Categories(String id, String name, int createAt, String urlImage, List<String> listMenuOfCategory) {
         this.id = id;
         this.name = name;
         this.createAt = createAt;
         this.urlImage = urlImage;
-        this.menuOfCategories = menuOfCategories;
+        this.listMenuOfCategory = listMenuOfCategory;
     }
 
     public String getId() {
@@ -53,11 +53,11 @@ public class Categories {
         this.urlImage = urlImage;
     }
 
-    public List<MenuOfCategories> getMenuOfCategories() {
-        return menuOfCategories;
+    public List<String> getListMenuOfCategory() {
+        return listMenuOfCategory;
     }
 
-    public void setMenuOfCategories(List<MenuOfCategories> menuOfCategories) {
-        this.menuOfCategories = menuOfCategories;
+    public void setListMenuOfCategory(List<String> listMenuOfCategory) {
+        this.listMenuOfCategory = listMenuOfCategory;
     }
 }

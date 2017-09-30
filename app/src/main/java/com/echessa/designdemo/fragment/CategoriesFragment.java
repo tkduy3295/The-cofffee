@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +20,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.echessa.designdemo.DBUtils.Categories;
 import com.echessa.designdemo.Adapter.CustomCategoriesAdapter;
 import com.echessa.designdemo.DBUtils.Position;
@@ -47,6 +54,10 @@ public class CategoriesFragment extends Fragment {
 
     private CustomCategoriesAdapter categoriesAdapter;
 
+    String url ="https://cappuccino-hello.herokuapp.com/api/menu/category/";
+
+    private ArrayList<String> listMenuOfCategory;
+
 
 
     @Override
@@ -55,115 +66,76 @@ public class CategoriesFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
+
         lvCategories = (ListView) view.findViewById(R.id.lvCategories);
-        lvCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View v, int position, long l) {
+
+        categoriesList = new ArrayList<Categories>();
 
 
 
+        listMenuOfCategory = new ArrayList<String>();
 
-                Bundle bundleIdCategories = new Bundle();
-                bundleIdCategories.putString("idCategories","ahihi");
+            RequestQueue queue = Volley.newRequestQueue(view.getContext());
 
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                try {
 
-                Fragment menuOfCategoriesFragment = new MenuOfCategoriesFragment();
-
-                menuOfCategoriesFragment.setArguments(bundleIdCategories);
-                menuOfCategoriesFragment.setArguments(bundleIdCategories);
-
-
-
-
-                FragmentTransaction trans = getFragmentManager().beginTransaction();
-                trans.replace(R.id.frame_root, new MenuOfCategoriesFragment());
-//                trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//                trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//                trans.addToBackStack(null);
-
-                trans.commit();
-
-            }
-        });
+                    JSONArray jsonArray = response.getJSONArray("response");
+                    for (int i = 0; i<jsonArray.length();i++){
+                        JSONObject categoriesItem = jsonArray.getJSONObject(i);
+                        String id = categoriesItem.getString("id");
+                        String name = categoriesItem.getString("name");
+                        int createAt = categoriesItem.getInt("createAt");
+                        String urlImage = categoriesItem.getString("urlImage");
+                        JSONArray items = categoriesItem.getJSONArray("items");
+                        for (int k =0; k<items.length();k++){
+                            listMenuOfCategory.add((String) items.get(k));
+                        }
 
 
+                        Categories categories = new Categories(id,name,createAt,urlImage,listMenuOfCategory);
+                        categoriesList.add(categories);
+                    }
+
+                    categoriesAdapter = new CustomCategoriesAdapter(getActivity(),categoriesList);
+
+                    lvCategories.setAdapter(categoriesAdapter);
+
+                    lvCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View v, int position, long l) {
+
+                            MenuFragment menuFragment = new MenuFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("idCategory", categoriesList.get(position).getId());
+                            menuFragment.setArguments(bundle);
 
 
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_root,menuFragment).commit();
 
-        new ReadJsonCategories().execute("https://cappuccino-hello.herokuapp.com/api/menu/category/");
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    toast(error.toString());
+                }
+            });
+
+            queue.add(jsonObjectRequest);
 
 
 
 
         return view;
-    }
-
-    private class ReadJsonCategories extends AsyncTask<String,Void,String> {
-
-        StringBuilder content = new StringBuilder();
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                URL url = new URL(strings[0]);
-
-                InputStreamReader inputStreamReader = new InputStreamReader(url.openConnection().getInputStream());
-
-                BufferedReader bufferedReader =  new BufferedReader(inputStreamReader);
-
-                String line="";
-                while((line = bufferedReader.readLine())!= null){
-                    content.append(line);
-                }
-                bufferedReader.close();
-
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return content.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            try {
-
-                JSONObject jsonObjectTable = new JSONObject(s);
-
-                categoriesList = new ArrayList<Categories>();
-
-
-                JSONArray response = jsonObjectTable.getJSONArray("response");
-
-
-                for (int i = 0 ; i < response.length() ; i++){
-                    JSONObject objectItem = response.getJSONObject(i);
-
-                    String id = objectItem.getString("id");
-                    String name = objectItem.getString("name");
-                    int createAt = objectItem.getInt("createAt");
-                    String urlImage = objectItem.getString("urlImage");
-
-
-                    Categories categories = new Categories(id,name,createAt,urlImage,null);
-                    categoriesList.add(categories);
-                }
-
-                categoriesAdapter = new CustomCategoriesAdapter(getActivity(),categoriesList);
-
-                lvCategories.setAdapter(categoriesAdapter);
-
-
-
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void toast(String msg){
