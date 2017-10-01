@@ -1,20 +1,38 @@
 package com.echessa.designdemo.DBUtils;
 
-import java.io.Serializable;
-
 /**
- * Created by sung on 28/09/2017.
+ * Created by sung on 01/10/2017.
  */
 
-public class Ordered implements Serializable {
+public class Ordered {
+    private String itemId;
+    private int srcImage;
     private String name;
     private int price;
-    private int quatity;
+    private int quantity;
 
-    public Ordered(String name, int price, int quatity) {
+    public Ordered(String itemId, int srcImage, String name, int price, int quantity) {
+        this.itemId = itemId;
+        this.srcImage = srcImage;
         this.name = name;
         this.price = price;
-        this.quatity = quatity;
+        this.quantity = quantity;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public int getSrcImage() {
+        return srcImage;
+    }
+
+    public void setSrcImage(int srcImage) {
+        this.srcImage = srcImage;
     }
 
     public String getName() {
@@ -33,11 +51,11 @@ public class Ordered implements Serializable {
         this.price = price;
     }
 
-    public int getQuatity() {
-        return quatity;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQuatity(int quatity) {
-        this.quatity = quatity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -19,7 +19,7 @@
 
 
         <ImageView
-            android:id="@+id/imagePayment"
+            android:id="@+id/imageReceipt"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
@@ -32,7 +32,7 @@
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/tvNamePayment"
+                android:id="@+id/tvNameReceipt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="cafe sua"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp">
                 <TextView
-                    android:id="@+id/tvPricePayment"
+                    android:id="@+id/tvPriceReceipt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
@@ -58,7 +58,7 @@
                     android:gravity="center">
 
                     <Button
-                        android:id="@+id/btnQualityPayment"
+                        android:id="@+id/btnQualityReceipt"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:background="@drawable/buttonquality"
@@ -70,7 +70,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvMoneyPayment"
+                    android:id="@+id/tvMoneyReceipt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"

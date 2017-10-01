@@ -15,10 +15,10 @@
 
 
     // TabLayout
+
     <style name="TabLayoutStyle" parent="Base.Widget.Design.TabLayout">
         <item name="android:textSize">20sp</item>
     </style>
-
 
 
 </resources>

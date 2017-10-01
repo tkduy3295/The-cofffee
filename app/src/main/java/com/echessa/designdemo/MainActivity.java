@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.echessa.designdemo.DBUtils.Ordered;
 import com.echessa.designdemo.DBUtils.Position;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> listOrder = new ArrayList<String>();
 
-    String url = "https://cappuccino-hello.herokuapp.com/api/table/";
+    String urlGetTable = "https://cappuccino-hello.herokuapp.com/api/table/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,16 @@ public class MainActivity extends AppCompatActivity {
 
         tableList = new ArrayList<Table>();
 
-        JsonObjectRequest jsonObjectRequest =new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        getTable();
+
+
+
+
+    }
+
+    private void getTable(){
+
+        JsonObjectRequest jsonObjectRequest =new JsonObjectRequest(Request.Method.GET, urlGetTable, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -150,28 +160,32 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
 
-                            Intent intent;
-                            if(getTable.getReceiptId().equals("")){
-
-                                intent = new Intent(MainActivity.this, MenuTabsActivity.class);
-
-                                String idTable =getTable.getId();
-                                String getReceiptId = getTable.getReceiptId();
-
-                                //checkFavorite = 1
-                                //checkMenuOfCategory = 0;
-                                String checkFavoriteOrMenuOfCategory = "1";
+                                Intent intent;
+                                if(getTable.getReceiptId().equals("")){
+                                    String urlUpdateTable ="https://cappuccino-hello.herokuapp.com/api/table/"+getTable.getId()+"/receipt/1";
+                                    updateTable(urlUpdateTable);
 
 
-                                intent.putExtra("idTable",idTable);
-                                intent.putExtra("getReceiptId",getReceiptId);
-                                intent.putExtra("checkFavoriteOrMenuOfCategory",checkFavoriteOrMenuOfCategory);
+                                    intent = new Intent(MainActivity.this, MenuTabsActivity.class);
 
-                                startActivity(intent);
-                            }else if(getTable.getReceiptId().equals("1")){
+                                    String idTable =getTable.getId();
+                                    String getReceiptId = getTable.getReceiptId();
 
-                            intent = new Intent(MainActivity.this, PaymentActivity.class);
-                            startActivity(intent);
+                                    //checkFavorite = 1
+                                    //checkMenuOfCategory = 0;
+                                    String checkFavoriteOrMenuOfCategory = "1";
+
+
+                                    intent.putExtra("idTable",idTable);
+                                    intent.putExtra("getReceiptId",getReceiptId);
+                                    intent.putExtra("checkFavoriteOrMenuOfCategory",checkFavoriteOrMenuOfCategory);
+
+                                    startActivity(intent);
+                                }else if(getTable.getReceiptId().equals("1")){
+
+                                    intent = new Intent(MainActivity.this, ReceiptActivity.class);
+
+                                    startActivity(intent);
                                 }
                             }
                         });
@@ -225,7 +239,21 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
+    }
 
+    private void updateTable(String url){
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        queue.add(stringRequest);
 
     }
 
@@ -235,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
 
     public void toast(String msg){
         Toast.makeText(getBaseContext(),msg,Toast.LENGTH_LONG).show();

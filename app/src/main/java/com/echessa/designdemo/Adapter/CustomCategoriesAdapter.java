@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.echessa.designdemo.DBUtils.Categories;
 import com.echessa.designdemo.R;
-import com.echessa.designdemo.fragment.MenuOfCategoriesFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

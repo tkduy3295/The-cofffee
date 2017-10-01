@@ -28,21 +28,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.echessa.designdemo.DBUtils.Categories;
 import com.echessa.designdemo.Adapter.CustomCategoriesAdapter;
-import com.echessa.designdemo.DBUtils.Position;
-import com.echessa.designdemo.DBUtils.SizeTable;
-import com.echessa.designdemo.DBUtils.Table;
-import com.echessa.designdemo.MainActivity;
-import com.echessa.designdemo.MenuTabsActivity;
-import com.echessa.designdemo.PaymentActivity;
 import com.echessa.designdemo.R;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 

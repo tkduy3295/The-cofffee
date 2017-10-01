@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.echessa.designdemo.PaymentActivity">
+    tools:context="com.echessa.designdemo.ReceiptActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,16 +13,16 @@
         android:background="@color/highlight">
 
         <android.support.design.widget.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content">
 
                         <LinearLayout
-                            android:id="@+id/llPayment"
+                            android:id="@+id/llReceipt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -95,61 +95,61 @@
                 </LinearLayout>
             </ScrollView>
 
-        <LinearLayout
-            android:weightSum="11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_alignParentBottom="true"
-            android:translationY="-10dp">
-
-            <Button
-
-                android:id="@+id/btnPayment"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:weightSum="11"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:textColor="@color/white"
-                android:background="@drawable/buttonpayment"
-                android:text="IN"
-                />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentBottom="true"
+                android:translationY="-10dp">
 
-            <Button
-                android:id="@+id/btnChooseMenuPayment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:textColor="@color/white"
-                android:background="@drawable/buttonchoosemenupayment"
-                android:text="Chọn món"
-                />
+                <Button
+
+                    android:id="@+id/btnReceipt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:textColor="@color/white"
+                    android:background="@drawable/buttonreceipt"
+                    android:text="IN"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/btnChooseMenuReceipt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:textColor="@color/white"
+                    android:background="@drawable/buttonreceipt"
+                    android:text="Chọn món"
+                    />
 
 
 
 
-        </LinearLayout>
+            </LinearLayout>
 
 
 
 
 
             <!--<Button-->
-                <!--android:id="@+id/btnPayment"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="In và thanh toán"-->
-                <!--android:background="@drawable/buttonpayment"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:textSize="18dp"-->
-                <!--android:layout_marginLeft="20dp"-->
-                <!--android:layout_marginRight="20dp"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:translationY="-10dp"/>-->
+            <!--android:id="@+id/btnReceipt"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="In và thanh toán"-->
+            <!--android:background="@drawable/buttonReceipt"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="18dp"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:translationY="-10dp"/>-->
         </RelativeLayout>
 
     </LinearLayout>

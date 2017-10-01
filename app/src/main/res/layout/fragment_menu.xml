@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/white"
-                android:background="@drawable/buttonpayment"
+                android:background="@drawable/buttonreceipt"
                 />
 
             <Button
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/white"
-                android:background="@drawable/buttonpayment"
+                android:background="@drawable/buttonreceipt"
                 android:text="xem giỏ hàng"
                 />
 

@@ -3,6 +3,7 @@ package com.echessa.designdemo;
 
 import android.content.Context;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -115,7 +116,8 @@ public class MenuTabsActivity extends AppCompatActivity{
         if (menuItem.getItemId() == android.R.id.home ) {
             String checkFavoriteOrMenuOfCategory = getIntent().getStringExtra("checkFavoriteOrMenuOfCategory");
             if(checkFavoriteOrMenuOfCategory.equals("0")){
-                this.finish();
+                Intent intent = new Intent(MenuTabsActivity.this,MainActivity.class);
+                startActivity(intent);
             }else if(checkFavoriteOrMenuOfCategory.equals("1")){
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_root,new CategoriesFragment()).commit();
