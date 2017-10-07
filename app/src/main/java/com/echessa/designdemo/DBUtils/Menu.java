@@ -10,19 +10,17 @@ public class Menu {
     private String name;
     private String description;
     private int price;
-    private int createAt;
     private String urlImage;
-    private int totalOrder;
+    private int totalFavorite;
     private int quatity;
 
-    public Menu(String id, String name, String description, int price, int createAt, String urlImage, int totalOrder, int quatity) {
+    public Menu(String id, String name, String description, int price, String urlImage, int totalFavorite, int quatity) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.createAt = createAt;
         this.urlImage = urlImage;
-        this.totalOrder = totalOrder;
+        this.totalFavorite = totalFavorite;
         this.quatity = quatity;
     }
 
@@ -58,14 +56,6 @@ public class Menu {
         this.price = price;
     }
 
-    public int getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(int createAt) {
-        this.createAt = createAt;
-    }
-
     public String getUrlImage() {
         return urlImage;
     }
@@ -75,11 +65,11 @@ public class Menu {
     }
 
     public int getTotalOrder() {
-        return totalOrder;
+        return totalFavorite;
     }
 
     public void setTotalOrder(int totalOrder) {
-        this.totalOrder = totalOrder;
+        this.totalFavorite = totalOrder;
     }
 
     public int getQuatity() {

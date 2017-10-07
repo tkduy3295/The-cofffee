@@ -27,7 +27,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:weightSum="3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -36,37 +35,13 @@
             android:translationY="-10dp">
 
             <Button
-
-                android:id="@+id/tvToTalMoneyOrder"
-                android:layout_width="0dp"
+                android:id="@+id/btnSeeReceipt"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/white"
-                android:background="@drawable/buttonreceipt"
-                />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textColor="@color/white"
                 android:background="@drawable/buttonreceipt"
                 android:text="xem giỏ hàng"
                 />
-
-
-            <Button
-                android:id="@+id/tvTotalQuatityOrder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/white"
-                android:background="@drawable/buttonchoosemenupayment"
-                />
-
-
-
-
         </LinearLayout>
 
     </LinearLayout>

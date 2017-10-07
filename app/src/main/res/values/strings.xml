@@ -35,7 +35,7 @@
     <string name="tvTotal">Total: </string>
 
     <string name="btnPayment">ceceipt </string>
-    <string name="title_activity_receipt">ReceiptActivity</string>
+    <string name="title_activity_receipt">Phiếu thanh toán</string>
 
 
 </resources>

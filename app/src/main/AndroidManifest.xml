@@ -23,10 +23,6 @@
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".PaymentActivity"
-            android:label="@string/title_activity_payment"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".ReceiptActivity"
             android:label="@string/title_activity_receipt"
             android:theme="@style/AppTheme" />

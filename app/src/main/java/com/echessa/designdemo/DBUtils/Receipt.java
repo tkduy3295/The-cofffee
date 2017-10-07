@@ -10,17 +10,13 @@ public class Receipt {
     private String id;
     private String tableId;
     private int totalPrice;
-    private int createAt;
-    private int payAt;
 
     private List<Ordered> listOrdered;
 
-    public Receipt(String id, String tableId, int totalPrice, int createAt, int payAt, List<Ordered> listOrdered) {
+    public Receipt(String id, String tableId, int totalPrice, List<Ordered> listOrdered) {
         this.id = id;
         this.tableId = tableId;
         this.totalPrice = totalPrice;
-        this.createAt = createAt;
-        this.payAt = payAt;
         this.listOrdered = listOrdered;
     }
 
@@ -46,22 +42,6 @@ public class Receipt {
 
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public int getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(int createAt) {
-        this.createAt = createAt;
-    }
-
-    public int getPayAt() {
-        return payAt;
-    }
-
-    public void setPayAt(int payAt) {
-        this.payAt = payAt;
     }
 
     public List<Ordered> getListOrdered() {

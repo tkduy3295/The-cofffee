@@ -73,7 +73,7 @@ public class CustomMenuAdapter extends BaseAdapter  {
 
             viewHolder.tvPriceMenu = (TextView) view.findViewById(R.id.tvPriceMenu);
 
-            viewHolder.tvTotalMenu = (TextView) view.findViewById(R.id.tvTotalMenu);
+            viewHolder.tvTotalFavorite = (TextView) view.findViewById(R.id.tvTotalFavorite);
 
             view.setTag(viewHolder);
 
@@ -96,7 +96,7 @@ public class CustomMenuAdapter extends BaseAdapter  {
 
 
 
-        viewHolder.tvTotalMenu.setText(""+ menu.getTotalOrder());
+        viewHolder.tvTotalFavorite.setText(""+ menu.getTotalOrder());
 
         viewHolder.tvQualityMenu.setText(""+ menu.getQuatity());
 
@@ -121,7 +121,7 @@ public class CustomMenuAdapter extends BaseAdapter  {
         TextView tvDescriptionMenu;
         TextView tvQualityMenu;
         TextView tvPriceMenu;
-        TextView tvTotalMenu;
+        TextView tvTotalFavorite;
 
 
     }

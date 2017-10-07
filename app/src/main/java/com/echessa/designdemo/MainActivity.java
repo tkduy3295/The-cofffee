@@ -24,22 +24,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.echessa.designdemo.DBUtils.Ordered;
 import com.echessa.designdemo.DBUtils.Position;
-import com.echessa.designdemo.DBUtils.SizeTable;
 import com.echessa.designdemo.DBUtils.Table;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     }
 
     private void getTable(){
@@ -96,30 +89,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray jsonArray = response.getJSONArray("response");
-                    for (int i=0;i<jsonArray.length();i++) {
 
-                        JSONObject itemMenu = jsonArray.getJSONObject(i);
+                    JSONArray tables = response.getJSONArray("response");
 
-                        String id = itemMenu.getString("id");
-                        String name = itemMenu.getString("name");
-                        String receiptId = itemMenu.getString("receiptId");
-                        String createAt = itemMenu.getString("createAt");
+                    for (int i=0;i<tables.length();i++) {
+
+                        JSONObject table = tables.getJSONObject(i);
+
+                        String id = table.getString("id");
+                        String name = table.getString("name");
+                        String receiptId = table.getString("receiptId");
+
+                        int x = table.getInt("positionX");
+                        int y = table.getInt("positionY");
 
 
-                        JSONObject position = itemMenu.getJSONObject("position");
-                        int x = position.getInt("x");
-                        int y = position.getInt("y");
-
-
-                        JSONObject size = itemMenu.getJSONObject("size");
-                        int w = size.getInt("w");
-                        int h = size.getInt("h");
-
-                        Table table = new Table(id, name, receiptId, createAt, new Position(x, y), new SizeTable(w, h));
-                        tableList.add(table);
+                        Table gettable = new Table(id, name,x,y,receiptId);
+                        tableList.add(gettable);
                     }
-
                     for (int j = 0 ; j < tableList.size() ; j++){
 
                         root = (ViewGroup) findViewById(R.id.root);
@@ -128,15 +115,14 @@ public class MainActivity extends AppCompatActivity {
 
                         final Table getTable = tableList.get(j);
 
-//                          creatTable.setId(Integer.parseInt(getTable.getId()));
                         creatTable.setText(getTable.getName());
                         creatTable.setTextColor(R.color.highlight);
 
-                        int widthTable = getTable.getSizeTable().getWidth()*200;
-                        int heightTable = getTable.getSizeTable().getHeight()*200;
+                        int widthTable = 150;
+                        int heightTable = 170;
 
-                        int positionX = getTable.getPosition().getX()*200;
-                        int positionY = getTable.getPosition().getY()*200;
+                        int positionX = getTable.getPositionX()*150;
+                        int positionY = getTable.getPositionY()*150;
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(widthTable,heightTable);
                         layoutParams.leftMargin = positionX;
                         layoutParams.topMargin = positionY;
@@ -146,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if(getTable.getReceiptId().equals("")){
                             creatTable.setBackgroundResource(R.color.white);
-                        }else if(getTable.getReceiptId().equals("1")){
+                        }else{
                             creatTable.setBackgroundResource(R.color.primary);
                         }
 
@@ -160,37 +146,18 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
 
-                                Intent intent;
                                 if(getTable.getReceiptId().equals("")){
-                                    String urlUpdateTable ="https://cappuccino-hello.herokuapp.com/api/table/"+getTable.getId()+"/receipt/1";
+                                    String urlUpdateTable ="https://cappuccino-hello.herokuapp.com/api/table/"+getTable.getId()+"/receipt/";
                                     updateTable(urlUpdateTable);
-
-
-                                    intent = new Intent(MainActivity.this, MenuTabsActivity.class);
-
-                                    String idTable =getTable.getId();
-                                    String getReceiptId = getTable.getReceiptId();
-
-                                    //checkFavorite = 1
-                                    //checkMenuOfCategory = 0;
-                                    String checkFavoriteOrMenuOfCategory = "1";
-
-
-                                    intent.putExtra("idTable",idTable);
-                                    intent.putExtra("getReceiptId",getReceiptId);
-                                    intent.putExtra("checkFavoriteOrMenuOfCategory",checkFavoriteOrMenuOfCategory);
-
-                                    startActivity(intent);
-                                }else if(getTable.getReceiptId().equals("1")){
-
-                                    intent = new Intent(MainActivity.this, ReceiptActivity.class);
-
+                                }else{
+                                    Intent intent = new Intent(MainActivity.this, ReceiptActivity.class);
+                                    intent.putExtra("getReceiptId",getTable.getReceiptId());
                                     startActivity(intent);
                                 }
                             }
                         });
 
-                        /*creatTable.setOnTouchListener(new View.OnTouchListener() {
+                        creatTable.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View v, MotionEvent event) {
 
@@ -223,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                                 root.invalidate();
                                 return false;
                             }
-                        });*/
+                        });
                     }
 
                 } catch (JSONException e) {
@@ -244,20 +211,37 @@ public class MainActivity extends AppCompatActivity {
     private void updateTable(String url){
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(JSONObject response) {
+                Intent intent = new Intent(MainActivity.this, MenuTabsActivity.class);
+
+                try {
+
+                    JSONObject jsonObject = response.getJSONObject("response");
+                    String receiptId = jsonObject.getString("receiptId");
+
+                    //checkFavorite = 1
+                    //checkMenuOfCategory = 0;
+                    String checkFavoriteOrMenuOfCategory = "1";
+
+                    intent.putExtra("getReceiptIdByTable",receiptId);
+                    intent.putExtra("checkFavoriteOrMenuOfCategory",checkFavoriteOrMenuOfCategory);
+
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.v("AAA",error.toString());
             }
         });
-        queue.add(stringRequest);
+        queue.add(jsonObjectRequest);
 
     }
-
-
 
     @Override
     protected void attachBaseContext(Context newBase) {

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,10 @@ import com.android.volley.toolbox.Volley;
 import com.echessa.designdemo.Adapter.CustomMenuAdapter;
 import com.echessa.designdemo.DBUtils.Menu;
 
+import com.echessa.designdemo.DBUtils.Ordered;
+import com.echessa.designdemo.MainActivity;
 import com.echessa.designdemo.R;
+import com.echessa.designdemo.ReceiptActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,9 +57,7 @@ public class MenuFragment extends Fragment {
 
     private CustomMenuAdapter customMenuAdapter;
 
-    private boolean checkFirstOrder = false;
-
-    private String receiptID ="";
+    Button btnSeeReceipt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +81,8 @@ public class MenuFragment extends Fragment {
 
         if(checkFavoriteOrMenuOfCategory.equals("1")){
 
-            String urlMenuByFavorite = "https://cappuccino-hello.herokuapp.com/api/menu/favorite";
+
+            String urlMenuByFavorite = "https://cappuccino-hello.herokuapp.com/api/menu/favorite/";
 
             getMenu(view, urlMenuByFavorite);
 
@@ -98,31 +101,50 @@ public class MenuFragment extends Fragment {
             }
         }
 
+
         return view;
     }
+
+
 
     public void getMenu(View view, String url){
         JsonObjectRequest jsonObjectRequest =new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray jsonArrayMenu = response.getJSONArray("response");
 
-                    for (int i = 0 ; i < jsonArrayMenu.length() ; i++){
-                        JSONObject MenuItem = jsonArrayMenu.getJSONObject(i);
+                    JSONArray menu = response.getJSONArray("response");
+                    List<Ordered> listOrdered;
+
+                    Bundle bundle =  getActivity().getIntent().getBundleExtra("listOrdered");
+                    if(bundle == null){
+                        listOrdered= new ArrayList<Ordered>();
+                    }else{
+                        listOrdered = (List<Ordered>)bundle.getSerializable("bundleListOrdered");
+                    }
+
+
+                    for (int i = 0 ; i < menu.length() ; i++){
+                        JSONObject MenuItem = menu.getJSONObject(i);
+
+                        int quatity = 0;
 
                         String id = MenuItem.getString("id");
                         String name = MenuItem.getString("name");
-                        String desciption = "Tên description";
+                        String desciption = MenuItem.getString("description");
                         int price = MenuItem.getInt("price");
-                        int createAt = MenuItem.getInt("createAt");
                         String urlImage = MenuItem.getString("urlImage");
-                        int totalOrder = MenuItem.getInt("totalOrder");
-                        int quatity = 0;
+                        int totalFavorite = 0;
 
-                        Menu menu = new Menu(id,name,desciption,price,createAt,urlImage,totalOrder,quatity);
+                        for(int j=0;j<listOrdered.size();j++){
+                            if(listOrdered.get(j).getItemId().equals(id)){
+                                quatity= listOrdered.get(j).getQuantity();
+                            }
+                        }
 
-                        listMenu.add(menu);
+                        Menu getMenu = new Menu(id,name,desciption,price,urlImage,totalFavorite,quatity);
+
+                        listMenu.add(getMenu);
 
                     }
 
@@ -133,45 +155,29 @@ public class MenuFragment extends Fragment {
 
                     final Intent intent = getActivity().getIntent();
 
-                    final String idTable = intent.getStringExtra("idTable");
-                    final String getReceiptId = intent.getStringExtra("getReceiptId");
+                    final String getReceiptIdByTable = intent.getStringExtra("getReceiptIdByTable");
 
                     gvMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                            if(getReceiptId.equals("")){
-                                if(checkFirstOrder == false){
+                        String urlCreatMenuItem = "https://cappuccino-hello.herokuapp.com/api/receipt/"+getReceiptIdByTable;
 
-                                    checkFirstOrder = true;
+                        insertReceipt(urlCreatMenuItem,"menuItemId", listMenu.get(position).getId());
 
-                                    intent.putExtra("getReceiptId","1");
+                        int quatityOrderNew = listMenu.get(position).getQuatity()+1;
+                        listMenu.get(position).setQuatity(quatityOrderNew);
 
-
-                                    String urlCreatReceipt = "https://cappuccino-hello.herokuapp.com/api/receipt/";
-
-                                    insertReceipt(Request.Method.POST, urlCreatReceipt, "tableId" , idTable , true);
-
-                                }else{
-                                    String urlCreatMenuItem = "https://cappuccino-hello.herokuapp.com/api/receipt/"+receiptID;
-
-                                    insertReceipt(Request.Method.PUT,urlCreatMenuItem,"menuItemId", listMenu.get(position).getId(),false);
-                                }
-
-                            }
-
-                            int quatityOrderNew = listMenu.get(position).getQuatity()+1;
-                            listMenu.get(position).setQuatity(quatityOrderNew);
-
-                            listMenu.set(position, listMenu.get(position));
-                            customMenuAdapter.notifyDataSetChanged();
-
-
+                        listMenu.set(position, listMenu.get(position));
+                        customMenuAdapter.notifyDataSetChanged();
+                            toast("Them mon thanh cong!!!");
 
                         }
 
 
                     });
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -190,29 +196,18 @@ public class MenuFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
-    public void insertReceipt(int request, String url, final String key , final String value , final boolean CheckRetureReceiptID){
+    public void insertReceipt(String url, final String key , final String value){
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
-        StringRequest stringRequest = new StringRequest(request, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(CheckRetureReceiptID == true){
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONObject object = jsonObject.getJSONObject("response");
-                        receiptID = object.getString("receiptID");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
                 toast("Bạn đã thêm thành công !!!!");
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("Error:",error.toString());
+                Log.v("AAAError:",error.toString());
             }
         }){
             @Override
@@ -222,7 +217,6 @@ public class MenuFragment extends Fragment {
                 return params;
             }
         };
-
         queue.add(stringRequest);
     }
 

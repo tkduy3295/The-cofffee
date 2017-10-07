@@ -10,18 +10,17 @@ public class Table {
 
     private String id;
     private String name;
+    private int positionX;
+    private int positionY;
     private String receiptId;
-    private String createAt;
-    private Position position;
-    private SizeTable sizeTable;
 
-    public Table(String id, String name, String receiptId, String createAt, Position position, SizeTable sizeTable) {
+
+    public Table(String id, String name, int positionX, int positionY, String receiptId) {
         this.id = id;
         this.name = name;
+        this.positionX = positionX;
+        this.positionY = positionY;
         this.receiptId = receiptId;
-        this.createAt = createAt;
-        this.position = position;
-        this.sizeTable = sizeTable;
     }
 
     public String getId() {
@@ -40,35 +39,27 @@ public class Table {
         this.name = name;
     }
 
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+    }
+
     public String getReceiptId() {
         return receiptId;
     }
 
     public void setReceiptId(String receiptId) {
         this.receiptId = receiptId;
-    }
-
-    public String getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public SizeTable getSizeTable() {
-        return sizeTable;
-    }
-
-    public void setSizeTable(SizeTable sizeTable) {
-        this.sizeTable = sizeTable;
     }
 }

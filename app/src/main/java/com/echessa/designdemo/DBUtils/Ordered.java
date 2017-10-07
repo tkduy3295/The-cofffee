@@ -1,17 +1,19 @@
 package com.echessa.designdemo.DBUtils;
 
+import java.io.Serializable;
+
 /**
  * Created by sung on 01/10/2017.
  */
 
-public class Ordered {
+public class Ordered implements Serializable {
     private String itemId;
-    private int srcImage;
+    private String srcImage;
     private String name;
     private int price;
     private int quantity;
 
-    public Ordered(String itemId, int srcImage, String name, int price, int quantity) {
+    public Ordered(String itemId, String srcImage, String name, int price, int quantity) {
         this.itemId = itemId;
         this.srcImage = srcImage;
         this.name = name;
@@ -27,11 +29,11 @@ public class Ordered {
         this.itemId = itemId;
     }
 
-    public int getSrcImage() {
+    public String getSrcImage() {
         return srcImage;
     }
 
-    public void setSrcImage(int srcImage) {
+    public void setSrcImage(String srcImage) {
         this.srcImage = srcImage;
     }
 

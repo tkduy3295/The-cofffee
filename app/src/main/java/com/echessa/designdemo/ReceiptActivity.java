@@ -1,8 +1,12 @@
 package com.echessa.designdemo;
 
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,20 +24,21 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.echessa.designdemo.DBUtils.Ordered;
 import com.echessa.designdemo.DBUtils.Receipt;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class ReceiptActivity extends AppCompatActivity {
+    private Toolbar toolbar;
 
     private String urlReceiptById;
-
-    private List<Receipt> listReceipt;
 
     private List<Ordered> listOrdered;
 
@@ -41,47 +46,60 @@ public class ReceiptActivity extends AppCompatActivity {
 
     TextView tvToTalMoney;
 
+    private int totalMoney =0;
+
+    private Button btnChooseMenuReceipt;
+
+    private Receipt receipt ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt);
 
-        urlReceiptById = "https://cappuccino-hello.herokuapp.com/api/receipt/59cfdc66eff96700044aec50";
+        // set Toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        listReceipt = new ArrayList<Receipt>();
+        // Set ActionBar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
+
+        urlReceiptById = "https://cappuccino-hello.herokuapp.com/api/receipt/"+getIntent().getStringExtra("getReceiptId");
 
         listOrdered = new ArrayList<Ordered>();
 
         tvToTalMoney = (TextView) findViewById(R.id.tvToTalMoney);
 
+
+
         JsonObjectRequest jsonObjectRequest =new JsonObjectRequest(Request.Method.GET, urlReceiptById, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONObject jsonObject = response.getJSONObject("response");
-                    String id = jsonObject.getString("id");
-                    String tableId = jsonObject.getString("tableId");
-                    int totalPrice = jsonObject.getInt("totalPrice");
-                    int createAt = jsonObject.getInt("createAt");
-                    int payAt = jsonObject.getInt("payAt");
+                    JSONObject resp = response.getJSONObject("response");
+                    String id = resp.getString("id");
+                    String tableId = resp.getString("tableId");
+                    int totalPrice = resp.getInt("totalPrice");
 
+                    JSONArray items= resp.getJSONArray("items");
 
-
-                    JSONArray items = jsonObject.getJSONArray("items");
 
                     for (int i=0;i<items.length();i++){
                         JSONObject item = items.getJSONObject(i);
                         String itemId = item.getString("itemId");
-                        int srcImage = R.drawable.sinhtodau;
+                        String srcImage = item.getString("urlImage");
                         String name = item.getString("name");
                         int price = item.getInt("price");
                         int quantity = item.getInt("quantity");
+                        totalMoney+=price*quantity;
                         listOrdered.add(new Ordered(itemId,srcImage,name,price,quantity));
-
                     }
 
 
-                    listReceipt.add(new Receipt(id,tableId,totalPrice,createAt,payAt,listOrdered));
+                    receipt = new Receipt(id,tableId,totalPrice,listOrdered);
 
 
                     llReceipt = (LinearLayout) findViewById(R.id.llReceipt);
@@ -89,13 +107,13 @@ public class ReceiptActivity extends AppCompatActivity {
 
                     for(int i = 0 ; i < listOrdered.size() ; i++){
 
-                        View v = getView(i, listOrdered);
+                        View v = getView(i, listOrdered.get(i));
                         llReceipt.addView(v);
                     }
 
-                    tvToTalMoney.setText(listReceipt.get(0).getTotalPrice()+"");
-
-
+                    tvToTalMoney.setText(receipt.getTotalPrice()+"");
+                    String total = NumberFormat.getNumberInstance(Locale.GERMAN).format(totalMoney);
+                    tvToTalMoney.setText(total);
 
 
                 } catch (Exception e) {
@@ -112,22 +130,22 @@ public class ReceiptActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
 
+        btnChooseMenuReceipt = (Button) findViewById(R.id.btnChooseMenuReceipt);
 
-        /*getReceipt(urlReceiptById);*/
+        btnChooseMenuReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ReceiptActivity.this, MenuTabsActivity.class);
 
-
-
-        /*llReceipt = (LinearLayout) findViewById(R.id.llReceipt);
-
-
-        for(int i = 0 ; i < listReceipt.size() ; i++){
-
-            View v = getView(i, listOrdered);
-            llReceipt.addView(v);
-        }*/
-
-
-
+                String checkFavoriteOrMenuOfCategory = "1";
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bundleListOrdered", (Serializable) listOrdered);
+                intent.putExtra("listOrdered", bundle);
+                intent.putExtra("checkFavoriteOrMenuOfCategory",checkFavoriteOrMenuOfCategory);
+                intent.putExtra("getReceiptIdByTable", receipt.getId());
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -139,7 +157,7 @@ public class ReceiptActivity extends AppCompatActivity {
         TextView tvMoneyReceipt;
     }
 
-    public View getView(int position, List<Ordered> listOrdered) {
+    public View getView(int position, Ordered ordered) {
 
         ViewHolder viewHolder;
 
@@ -166,100 +184,39 @@ public class ReceiptActivity extends AppCompatActivity {
         view.setTag(viewHolder);
 
 
-//        Payment payment = (Payment) paymentList.get(position);
-
         Typeface mFont = Typeface.createFromAsset(this.getAssets(),"Roboto-Bold.ttf");
 
-        for(int i = 0;i<listOrdered.size();i++){
 
-            Ordered ordered = listOrdered.get(i);
-
-            viewHolder.imageReceipt.setImageResource(ordered.getSrcImage());
+        Picasso.with(getBaseContext()).load(ordered.getSrcImage()).into(viewHolder.imageReceipt);
 
 
-            viewHolder.tvNameReceipt.setText(ordered.getName());
-            viewHolder.tvNameReceipt.setTypeface(mFont);
+        viewHolder.tvNameReceipt.setText(ordered.getName());
+        viewHolder.tvNameReceipt.setTypeface(mFont);
 
-            String price = NumberFormat.getNumberInstance(Locale.GERMAN).format(ordered.getPrice());
+        String price = NumberFormat.getNumberInstance(Locale.GERMAN).format(ordered.getPrice());
 
-            viewHolder.tvPriceReceipt.setText(""+price+" đ");
+        viewHolder.tvPriceReceipt.setText(""+price+" đ");
 
-            viewHolder.btnQualityReceipt.setText(""+ordered.getQuantity());
+        viewHolder.btnQualityReceipt.setText(""+ordered.getQuantity());
 
-            int caculMoney = ordered.getPrice()*ordered.getQuantity();
+        int caculMoney = ordered.getPrice()*ordered.getQuantity();
 
-            String money = NumberFormat.getNumberInstance(Locale.GERMAN).format(caculMoney);
+        String money = NumberFormat.getNumberInstance(Locale.GERMAN).format(caculMoney);
 
-            viewHolder.tvMoneyReceipt.setText(""+money+" đ");
-        }
+        viewHolder.tvMoneyReceipt.setText(""+money+" đ");
 
 
 
         return view;
     }
 
-
-
-    /*private void getReceipt(String url){
-
-
-        JsonObjectRequest jsonObjectRequest =new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONObject jsonObject = response.getJSONObject("response");
-                    String id = jsonObject.getString("id");
-                    String tableId = jsonObject.getString("tableId");
-                    int totalPrice = jsonObject.getInt("totalPrice");
-                    int createAt = jsonObject.getInt("createAt");
-                    int payAt = jsonObject.getInt("payAt");
-
-
-
-                    JSONArray items = jsonObject.getJSONArray("items");
-
-                    for (int i=0;i<items.length();i++){
-                        JSONObject item = items.getJSONObject(i);
-                        String itemId = item.getString("itemId");
-                        int srcImage = R.drawable.sinhtodau;
-                        String name = item.getString("name");
-                        int price = item.getInt("price");
-                        int quantity = item.getInt("quantity");
-                        listOrdered.add(new Ordered(itemId,srcImage,name,price,quantity));
-
-                    }
-
-
-                    listReceipt.add(new Receipt(id,tableId,totalPrice,createAt,payAt,listOrdered));
-
-
-
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getBaseContext(),error.toString(),Toast.LENGTH_LONG).show();
-            }
-        });
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(jsonObjectRequest);
-    }*/
-
     // event icon back
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == android.R.id.home) {
-//            Intent intent = new Intent(PaymentActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-            this.finish();
+            Intent intent = new Intent(ReceiptActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(menuItem);
     }
