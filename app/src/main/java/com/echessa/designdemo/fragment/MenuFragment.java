@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,9 +31,8 @@ import com.echessa.designdemo.DBUtils.Ordered;
 import com.echessa.designdemo.MainActivity;
 import com.echessa.designdemo.R;
 import com.echessa.designdemo.ReceiptActivity;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -81,13 +79,13 @@ public class MenuFragment extends Fragment {
 
         if(checkFavoriteOrMenuOfCategory.equals("1")){
 
-
             String urlMenuByFavorite = "https://cappuccino-hello.herokuapp.com/api/menu/favorite/";
 
             getMenu(view, urlMenuByFavorite);
 
             //set checkFavoriteOrMenuOfCategory again
-            getActivity().getIntent().putExtra("checkFavoriteOrMenuOfCategory","0");
+            if(checkFavoriteOrMenuOfCategory.equals("1"))
+                getActivity().getIntent().putExtra("checkFavoriteOrMenuOfCategory","0");
 
         }else if(checkFavoriteOrMenuOfCategory.equals("0")){
             Bundle bundle = getArguments();
@@ -101,6 +99,19 @@ public class MenuFragment extends Fragment {
             }
         }
 
+        btnSeeReceipt = (Button) view.findViewById(R.id.btnSeeReceipt);
+
+        btnSeeReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(view.getContext(), ReceiptActivity.class);
+                intent.putExtra("getReceiptId",getActivity().getIntent().getStringExtra("getReceiptIdByTable"));
+                startActivity(intent);
+            }
+        });
+
+
 
         return view;
     }
@@ -113,9 +124,7 @@ public class MenuFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 try {
 
-                    JSONArray menu = response.getJSONArray("response");
                     List<Ordered> listOrdered;
-
                     Bundle bundle =  getActivity().getIntent().getBundleExtra("listOrdered");
                     if(bundle == null){
                         listOrdered= new ArrayList<Ordered>();
@@ -123,33 +132,21 @@ public class MenuFragment extends Fragment {
                         listOrdered = (List<Ordered>)bundle.getSerializable("bundleListOrdered");
                     }
 
+                    Gson gson = new Gson();
+                    listMenu = gson.fromJson(response.toString(),ListMenu.class).getResponse();
 
-                    for (int i = 0 ; i < menu.length() ; i++){
-                        JSONObject MenuItem = menu.getJSONObject(i);
-
-                        int quatity = 0;
-
-                        String id = MenuItem.getString("id");
-                        String name = MenuItem.getString("name");
-                        String desciption = MenuItem.getString("description");
-                        int price = MenuItem.getInt("price");
-                        String urlImage = MenuItem.getString("urlImage");
-                        int totalFavorite = 0;
-
-                        for(int j=0;j<listOrdered.size();j++){
-                            if(listOrdered.get(j).getItemId().equals(id)){
-                                quatity= listOrdered.get(j).getQuantity();
+                    for (Menu menu : listMenu){
+                        for(Ordered ordered: listOrdered){
+                            if(ordered.getItemId().equals(menu.getId())){
+                                menu.setFavorite(ordered.getQuantity());
+                                break;
                             }
                         }
-
-                        Menu getMenu = new Menu(id,name,desciption,price,urlImage,totalFavorite,quatity);
-
-                        listMenu.add(getMenu);
-
                     }
 
 
-                    customMenuAdapter = new CustomMenuAdapter(getActivity(), listMenu);
+
+                    customMenuAdapter = new CustomMenuAdapter(getActivity(),listMenu);
 
                     gvMenu.setAdapter(customMenuAdapter);
 
@@ -165,15 +162,12 @@ public class MenuFragment extends Fragment {
 
                         insertReceipt(urlCreatMenuItem,"menuItemId", listMenu.get(position).getId());
 
-                        int quatityOrderNew = listMenu.get(position).getQuatity()+1;
-                        listMenu.get(position).setQuatity(quatityOrderNew);
+                        int quatityOrderNew = listMenu.get(position).getFavorite()+1;
+                        listMenu.get(position).setFavorite(quatityOrderNew);
 
                         listMenu.set(position, listMenu.get(position));
                         customMenuAdapter.notifyDataSetChanged();
-                            toast("Them mon thanh cong!!!");
-
                         }
-
 
                     });
 
@@ -196,13 +190,14 @@ public class MenuFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
+
+
     public void insertReceipt(String url, final String key , final String value){
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                toast("Bạn đã thêm thành công !!!!");
             }
         }, new Response.ErrorListener() {
             @Override
@@ -218,6 +213,18 @@ public class MenuFragment extends Fragment {
             }
         };
         queue.add(stringRequest);
+    }
+
+    private class ListMenu{
+        private List<Menu> response;
+
+        public List<Menu> getResponse() {
+            return response;
+        }
+
+        public void setResponse(List<Menu> response) {
+            this.response = response;
+        }
     }
 
     public void toast(String msg){

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,6 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.echessa.designdemo.DBUtils.Ordered;
 import com.echessa.designdemo.DBUtils.Receipt;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -32,25 +34,26 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class ReceiptActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private String urlReceiptById;
 
-    private List<Ordered> listOrdered;
+    private LinearLayout llReceipt;
 
-    LinearLayout llReceipt;
+    private TextView tvToTalMoney;
 
-    TextView tvToTalMoney;
-
-    private int totalMoney =0;
+    private Receipt receipt;
 
     private Button btnChooseMenuReceipt;
 
-    private Receipt receipt ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +72,9 @@ public class ReceiptActivity extends AppCompatActivity {
 
         urlReceiptById = "https://cappuccino-hello.herokuapp.com/api/receipt/"+getIntent().getStringExtra("getReceiptId");
 
-        listOrdered = new ArrayList<Ordered>();
-
         tvToTalMoney = (TextView) findViewById(R.id.tvToTalMoney);
+
+
 
 
 
@@ -79,41 +82,24 @@ public class ReceiptActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONObject resp = response.getJSONObject("response");
-                    String id = resp.getString("id");
-                    String tableId = resp.getString("tableId");
-                    int totalPrice = resp.getInt("totalPrice");
 
-                    JSONArray items= resp.getJSONArray("items");
+                    Gson gson = new Gson();
+                    JSONObject respo = response.getJSONObject("response");
+                    receipt= gson.fromJson(respo.toString(),Receipt.class);
 
 
-                    for (int i=0;i<items.length();i++){
-                        JSONObject item = items.getJSONObject(i);
-                        String itemId = item.getString("itemId");
-                        String srcImage = item.getString("urlImage");
-                        String name = item.getString("name");
-                        int price = item.getInt("price");
-                        int quantity = item.getInt("quantity");
-                        totalMoney+=price*quantity;
-                        listOrdered.add(new Ordered(itemId,srcImage,name,price,quantity));
-                    }
+                   llReceipt = (LinearLayout) findViewById(R.id.llReceipt);
 
 
-                    receipt = new Receipt(id,tableId,totalPrice,listOrdered);
+                    for(int i = 0 ; i < receipt.getListOrdered().size(); i++){
 
-
-                    llReceipt = (LinearLayout) findViewById(R.id.llReceipt);
-
-
-                    for(int i = 0 ; i < listOrdered.size() ; i++){
-
-                        View v = getView(i, listOrdered.get(i));
+                        View v = getView(i, receipt.getListOrdered().get(i));
                         llReceipt.addView(v);
                     }
 
-                    tvToTalMoney.setText(receipt.getTotalPrice()+"");
-                    String total = NumberFormat.getNumberInstance(Locale.GERMAN).format(totalMoney);
-                    tvToTalMoney.setText(total);
+                    //tvToTalMoney.setText(receipt.getTotalPrice()+"");
+                    String total = NumberFormat.getNumberInstance(Locale.GERMAN).format(receipt.getTotalPrice());
+                    tvToTalMoney.setText(total+ " đ");
 
 
                 } catch (Exception e) {
@@ -130,6 +116,16 @@ public class ReceiptActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
 
+
+
+
+
+
+
+
+
+
+
         btnChooseMenuReceipt = (Button) findViewById(R.id.btnChooseMenuReceipt);
 
         btnChooseMenuReceipt.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +135,7 @@ public class ReceiptActivity extends AppCompatActivity {
 
                 String checkFavoriteOrMenuOfCategory = "1";
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("bundleListOrdered", (Serializable) listOrdered);
+                bundle.putSerializable("bundleListOrdered", (Serializable) receipt.getListOrdered());
                 intent.putExtra("listOrdered", bundle);
                 intent.putExtra("checkFavoriteOrMenuOfCategory",checkFavoriteOrMenuOfCategory);
                 intent.putExtra("getReceiptIdByTable", receipt.getId());
@@ -149,17 +145,20 @@ public class ReceiptActivity extends AppCompatActivity {
 
     }
 
+
     private class ViewHolder{
         ImageView imageReceipt;
         TextView tvNameReceipt;
         TextView tvPriceReceipt;
         Button btnQualityReceipt;
         TextView tvMoneyReceipt;
+        Button btnMinusReceipt;
+        Button btnPlusReceipt;
     }
 
-    public View getView(int position, Ordered ordered) {
+    public View getView(final int position, final Ordered ordered) {
 
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
 
         View view = null ;
 
@@ -180,6 +179,11 @@ public class ReceiptActivity extends AppCompatActivity {
         viewHolder.btnQualityReceipt = (Button) view.findViewById(R.id.btnQualityReceipt);
 
         viewHolder.tvMoneyReceipt = (TextView) view.findViewById(R.id.tvMoneyReceipt);
+
+        viewHolder.btnMinusReceipt = (Button) view.findViewById(R.id.btnMinusReceipt);
+
+        viewHolder.btnPlusReceipt = (Button) view.findViewById(R.id.btnPlusReceipt);
+
 
         view.setTag(viewHolder);
 
@@ -205,10 +209,68 @@ public class ReceiptActivity extends AppCompatActivity {
 
         viewHolder.tvMoneyReceipt.setText(""+money+" đ");
 
+        viewHolder.btnMinusReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!((String)viewHolder.btnQualityReceipt.getText()).equals("1")){
+                    String urlInsertMenuItem = "https://cappuccino-hello.herokuapp.com/api/receipt/"+getIntent().getStringExtra("getReceiptId");
+                    toast(urlInsertMenuItem);
 
+                    //updateReceipt(urlInsertMenuItem);
+
+                    int quatityOrderNew = Integer.parseInt((String) viewHolder.btnQualityReceipt.getText())-1;
+                    viewHolder.btnQualityReceipt.setText(quatityOrderNew+"");
+                }
+
+            }
+        });
+
+
+        viewHolder.btnPlusReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String urlInsertMenuItem = "https://cappuccino-hello.herokuapp.com/api/receipt/"+getIntent().getStringExtra("getReceiptId");
+                toast(urlInsertMenuItem);
+
+                //updateReceipt(urlInsertMenuItem);
+
+                int quatityOrderNew = Integer.parseInt((String) viewHolder.btnQualityReceipt.getText())+1;
+                viewHolder.btnQualityReceipt.setText(quatityOrderNew+"");
+            }
+        });
 
         return view;
     }
+
+    /*private void updateReceipt(String url){
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("AAA",error.toString());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("key", value);
+                return params;
+            }
+        };
+        queue.add(jsonObjectRequest);
+
+    }*/
 
     // event icon back
     @Override

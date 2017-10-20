@@ -3,16 +3,14 @@ package com.echessa.designdemo.Adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.echessa.designdemo.DBUtils.Categories;
+import com.echessa.designdemo.DBUtils.Category;
 import com.echessa.designdemo.R;
 import com.squareup.picasso.Picasso;
 
@@ -26,13 +24,13 @@ public class CustomCategoriesAdapter extends  BaseAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private List<Categories> categoriesList;
+    private List<Category> categoryList;
 
-    public CustomCategoriesAdapter(Context context, List<Categories> categoriesList) {
+    public CustomCategoriesAdapter(Context context, List<Category> categoryList) {
 
         this.context = context;
 
-        this.categoriesList = categoriesList;
+        this.categoryList = categoryList;
 
         this.layoutInflater = LayoutInflater.from(context);
     }
@@ -40,12 +38,12 @@ public class CustomCategoriesAdapter extends  BaseAdapter {
 
     @Override
     public int getCount() {
-        return categoriesList.size();
+        return categoryList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return categoriesList.get(position);
+        return categoryList.get(position);
     }
 
     @Override
@@ -73,12 +71,12 @@ public class CustomCategoriesAdapter extends  BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Categories categories = this.categoriesList.get(position);
+        Category category = this.categoryList.get(position);
         Typeface mFont = Typeface.createFromAsset(context.getAssets(),"Roboto-Bold.ttf");
 
-        Picasso.with(context).load(categories.getUrlImage()).into(viewHolder.imageCategories);
+        Picasso.with(context).load(category.getUrlImage()).into(viewHolder.imageCategories);
 
-        viewHolder.tvNameCategories.setText(categories.getName());
+        viewHolder.tvNameCategories.setText(category.getName());
         viewHolder.tvNameCategories.setTypeface(mFont);
 
 

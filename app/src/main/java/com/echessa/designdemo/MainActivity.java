@@ -3,13 +3,11 @@ package com.echessa.designdemo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.design.widget.TabLayout;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,10 +23,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.echessa.designdemo.DBUtils.Position;
 import com.echessa.designdemo.DBUtils.Table;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private int _xDelta;
     private int _yDelta;
 
-    private List<Table> tableList ;
-
     private List<String> listOrder = new ArrayList<String>();
 
     String urlGetTable = "https://cappuccino-hello.herokuapp.com/api/table/";
@@ -73,13 +69,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        tableList = new ArrayList<Table>();
-
         getTable();
-
-
-
-
 
     }
 
@@ -90,47 +80,29 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
 
-                    JSONArray tables = response.getJSONArray("response");
+                    Gson gson = new Gson();
+                    ListTable listTable = gson.fromJson(response.toString(),ListTable.class);
 
-                    for (int i=0;i<tables.length();i++) {
-
-                        JSONObject table = tables.getJSONObject(i);
-
-                        String id = table.getString("id");
-                        String name = table.getString("name");
-                        String receiptId = table.getString("receiptId");
-
-                        int x = table.getInt("positionX");
-                        int y = table.getInt("positionY");
-
-
-                        Table gettable = new Table(id, name,x,y,receiptId);
-                        tableList.add(gettable);
-                    }
-                    for (int j = 0 ; j < tableList.size() ; j++){
+                    for (final Table table : listTable.getResponse()){
 
                         root = (ViewGroup) findViewById(R.id.root);
 
                         creatTable = new Button(getBaseContext());
 
-                        final Table getTable = tableList.get(j);
-
-                        creatTable.setText(getTable.getName());
+                        creatTable.setText(table.getName());
                         creatTable.setTextColor(R.color.highlight);
 
-                        int widthTable = 150;
+                        int widthTable = 170;
                         int heightTable = 170;
 
-                        int positionX = getTable.getPositionX()*150;
-                        int positionY = getTable.getPositionY()*150;
+                        int positionX = table.getPositionX()*150;
+                        int positionY = table.getPositionY()*150;
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(widthTable,heightTable);
                         layoutParams.leftMargin = positionX;
                         layoutParams.topMargin = positionY;
-//                      layoutParams.bottomMargin = 0;
-//                      layoutParams.rightMargin = 0;
 
 
-                        if(getTable.getReceiptId().equals("")){
+                        if(table.getReceiptId().equals("")){
                             creatTable.setBackgroundResource(R.color.white);
                         }else{
                             creatTable.setBackgroundResource(R.color.primary);
@@ -141,23 +113,22 @@ public class MainActivity extends AppCompatActivity {
 
                         root.addView(creatTable);
 
-
                         creatTable.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
-                                if(getTable.getReceiptId().equals("")){
-                                    String urlUpdateTable ="https://cappuccino-hello.herokuapp.com/api/table/"+getTable.getId()+"/receipt/";
+                                if(table.getReceiptId().equals("")){
+                                    String urlUpdateTable ="https://cappuccino-hello.herokuapp.com/api/table/"+table.getId()+"/receipt/";
                                     updateTable(urlUpdateTable);
                                 }else{
                                     Intent intent = new Intent(MainActivity.this, ReceiptActivity.class);
-                                    intent.putExtra("getReceiptId",getTable.getReceiptId());
+                                    intent.putExtra("getReceiptId",table.getReceiptId());
                                     startActivity(intent);
                                 }
                             }
                         });
 
-                        creatTable.setOnTouchListener(new View.OnTouchListener() {
+                        /*creatTable.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View v, MotionEvent event) {
 
@@ -190,10 +161,11 @@ public class MainActivity extends AppCompatActivity {
                                 root.invalidate();
                                 return false;
                             }
-                        });
+                        });*/
+
                     }
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -241,6 +213,18 @@ public class MainActivity extends AppCompatActivity {
         });
         queue.add(jsonObjectRequest);
 
+    }
+
+    private class ListTable{
+        private List<Table> response;
+
+        public List<Table> getResponse() {
+            return response;
+        }
+
+        public void setResponse(List<Table> response) {
+            this.response = response;
+        }
     }
 
     @Override

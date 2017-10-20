@@ -10,14 +10,13 @@ public class Receipt {
     private String id;
     private String tableId;
     private int totalPrice;
+    private List<Ordered> items;
 
-    private List<Ordered> listOrdered;
-
-    public Receipt(String id, String tableId, int totalPrice, List<Ordered> listOrdered) {
+    public Receipt(String id, String tableId, int totalPrice, List<Ordered> items) {
         this.id = id;
         this.tableId = tableId;
         this.totalPrice = totalPrice;
-        this.listOrdered = listOrdered;
+        this.items = items;
     }
 
     public String getId() {
@@ -45,10 +44,10 @@ public class Receipt {
     }
 
     public List<Ordered> getListOrdered() {
-        return listOrdered;
+        return items;
     }
 
     public void setListOrdered(List<Ordered> listOrdered) {
-        this.listOrdered = listOrdered;
+        this.items = listOrdered;
     }
 }

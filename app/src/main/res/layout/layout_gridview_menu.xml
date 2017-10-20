@@ -55,13 +55,13 @@
 
 
             <LinearLayout
-                android:weightSum="8"
+                android:weightSum="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 >
-                <LinearLayout
+               <!-- <LinearLayout
                     android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content">
@@ -83,15 +83,14 @@
                         android:layout_marginLeft="4px"
                         />
 
-                </LinearLayout>
+                </LinearLayout>-->
 
 
 
                 <LinearLayout
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     >
 
                     <ImageView
@@ -112,15 +111,8 @@
 
                 </LinearLayout>
 
-
-
-
-
-
-
-
                 <TextView
-                    android:layout_weight="4"
+                    android:layout_weight="1"
                     android:id="@+id/tvPriceMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -148,7 +140,7 @@
                     android:id="@+id/btnSubMenu"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:background="@drawable/buttonmenu"
+                    android:background="@drawable/buttonplusminus"
                     android:layout_alignParentLeft="true"
                     android:visibility="gone"
                     />
@@ -169,7 +161,7 @@
                     android:id="@+id/btnPlusMenu"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:background="@drawable/buttonmenu"
+                    android:background="@drawable/buttonplusminus"
                     android:layout_alignParentRight="true"
                     />
 

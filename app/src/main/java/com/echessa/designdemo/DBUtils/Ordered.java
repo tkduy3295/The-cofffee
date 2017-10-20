@@ -1,5 +1,8 @@
 package com.echessa.designdemo.DBUtils;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,17 +10,18 @@ import java.io.Serializable;
  */
 
 public class Ordered implements Serializable {
+
     private String itemId;
-    private String srcImage;
     private String name;
     private int price;
+    private String urlImage;
     private int quantity;
 
-    public Ordered(String itemId, String srcImage, String name, int price, int quantity) {
+    public Ordered(String itemId, String name, int price, String urlImage, int quantity) {
         this.itemId = itemId;
-        this.srcImage = srcImage;
         this.name = name;
         this.price = price;
+        this.urlImage = urlImage;
         this.quantity = quantity;
     }
 
@@ -27,14 +31,6 @@ public class Ordered implements Serializable {
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
-    }
-
-    public String getSrcImage() {
-        return srcImage;
-    }
-
-    public void setSrcImage(String srcImage) {
-        this.srcImage = srcImage;
     }
 
     public String getName() {
@@ -51,6 +47,14 @@ public class Ordered implements Serializable {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getSrcImage() {
+        return urlImage;
+    }
+
+    public void setSrcImage(String srcImage) {
+        this.urlImage = srcImage;
     }
 
     public int getQuantity() {

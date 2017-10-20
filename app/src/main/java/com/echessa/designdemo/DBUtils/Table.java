@@ -1,10 +1,7 @@
 package com.echessa.designdemo.DBUtils;
 
 import java.io.Serializable;
-
-/**
- * Created by sung on 26/09/2017.
- */
+import java.util.List;
 
 public class Table {
 

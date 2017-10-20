@@ -1,23 +1,13 @@
 package com.echessa.designdemo.fragment;
 
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,9 +16,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.echessa.designdemo.DBUtils.Categories;
+import com.echessa.designdemo.DBUtils.Category;
 import com.echessa.designdemo.Adapter.CustomCategoriesAdapter;
 import com.echessa.designdemo.R;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
@@ -41,7 +32,7 @@ public class CategoriesFragment extends Fragment {
 
     private ListView lvCategories;
 
-    private List<Categories> categoriesList;
+    private List<Category> listCategory;
 
     private CustomCategoriesAdapter categoriesAdapter;
 
@@ -60,7 +51,7 @@ public class CategoriesFragment extends Fragment {
 
         lvCategories = (ListView) view.findViewById(R.id.lvCategories);
 
-        categoriesList = new ArrayList<Categories>();
+        listCategory = new ArrayList<Category>();
 
 
 
@@ -73,24 +64,11 @@ public class CategoriesFragment extends Fragment {
                 public void onResponse(JSONObject response) {
                 try {
 
-                    JSONArray jsonArray = response.getJSONArray("response");
-                    for (int i = 0; i<jsonArray.length();i++){
-                        JSONObject categoriesItem = jsonArray.getJSONObject(i);
-                        String id = categoriesItem.getString("id");
-                        String name = categoriesItem.getString("name");
-                        int createAt = categoriesItem.getInt("createAt");
-                        String urlImage = categoriesItem.getString("urlImage");
-                        JSONArray items = categoriesItem.getJSONArray("items");
-                        for (int k =0; k<items.length();k++){
-                            listMenuOfCategory.add((String) items.get(k));
-                        }
+                    Gson gson = new Gson();
 
+                    listCategory = gson.fromJson(response.toString(), ListCategory.class).getListCategory();
 
-                        Categories categories = new Categories(id,name,createAt,urlImage,listMenuOfCategory);
-                        categoriesList.add(categories);
-                    }
-
-                    categoriesAdapter = new CustomCategoriesAdapter(getActivity(),categoriesList);
+                    categoriesAdapter = new CustomCategoriesAdapter(getActivity(), listCategory);
 
                     lvCategories.setAdapter(categoriesAdapter);
 
@@ -99,13 +77,12 @@ public class CategoriesFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View v, int position, long l) {
 
-                            MenuFragment menuFragment = new MenuFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("idCategory", categoriesList.get(position).getId());
-                            menuFragment.setArguments(bundle);
+                        MenuFragment menuFragment = new MenuFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("idCategory", listCategory.get(position).getId());
+                        menuFragment.setArguments(bundle);
 
-
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_root,menuFragment).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_root,menuFragment).commit();
 
                         }
                     });
@@ -124,9 +101,19 @@ public class CategoriesFragment extends Fragment {
             queue.add(jsonObjectRequest);
 
 
-
-
         return view;
+    }
+
+    private class ListCategory{
+        private List<Category> response;
+
+        public List<Category> getListCategory() {
+            return response;
+        }
+
+        public void setListCategory(List<Category> listCategory) {
+            this.response = listCategory;
+        }
     }
 
     public void toast(String msg){

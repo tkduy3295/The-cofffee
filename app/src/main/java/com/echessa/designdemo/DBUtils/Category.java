@@ -6,14 +6,14 @@ import java.util.List;
  * Created by sung on 17/08/2017.
  */
 
-public class Categories {
+public class Category {
     private String id;
     private String name;
     private int createAt;
     private String urlImage;
     private List<String> listMenuOfCategory;
 
-    public Categories(String id, String name, int createAt, String urlImage, List<String> listMenuOfCategory) {
+    public Category(String id, String name, int createAt, String urlImage, List<String> listMenuOfCategory) {
         this.id = id;
         this.name = name;
         this.createAt = createAt;

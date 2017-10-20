@@ -73,8 +73,6 @@ public class CustomMenuAdapter extends BaseAdapter  {
 
             viewHolder.tvPriceMenu = (TextView) view.findViewById(R.id.tvPriceMenu);
 
-            viewHolder.tvTotalFavorite = (TextView) view.findViewById(R.id.tvTotalFavorite);
-
             view.setTag(viewHolder);
 
         }else{
@@ -94,23 +92,13 @@ public class CustomMenuAdapter extends BaseAdapter  {
         viewHolder.tvDescriptionMenu.setText(menu.getDescription());
 
 
-
-
-        viewHolder.tvTotalFavorite.setText(""+ menu.getTotalOrder());
-
-        viewHolder.tvQualityMenu.setText(""+ menu.getQuatity());
-
+        viewHolder.tvQualityMenu.setText(""+ menu.getFavorite());
 
 
         String price = NumberFormat.getNumberInstance(Locale.GERMAN).format(menu.getPrice());
 
         viewHolder.tvPriceMenu.setText(""+price+" đ");
         /*viewHolder.tvPriceMenu.setTypeface(mFont);*/
-
-
-
-
-
 
         return view;
     }
@@ -121,8 +109,6 @@ public class CustomMenuAdapter extends BaseAdapter  {
         TextView tvDescriptionMenu;
         TextView tvQualityMenu;
         TextView tvPriceMenu;
-        TextView tvTotalFavorite;
-
 
     }
 }

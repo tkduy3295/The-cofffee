@@ -123,6 +123,10 @@ public class MenuTabsActivity extends AppCompatActivity{
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_root,new CategoriesFragment()).commit();
                 getIntent().putExtra("checkFavoriteOrMenuOfCategory","0");
 
+            }else if(checkFavoriteOrMenuOfCategory.equals("2")){
+                Intent intent = new Intent(MenuTabsActivity.this,ReceiptActivity.class);
+                intent.putExtra("getReceiptId",getIntent().getStringExtra("getReceiptIdByTable"));
+                startActivity(intent);
             }
         }
         return false;

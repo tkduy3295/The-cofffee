@@ -8,20 +8,18 @@ public class Menu {
 
     private String id;
     private String name;
-    private String description;
     private int price;
     private String urlImage;
-    private int totalFavorite;
-    private int quatity;
+    private String description;
+    private int favorite;
 
-    public Menu(String id, String name, String description, int price, String urlImage, int totalFavorite, int quatity) {
+    public Menu(String id, String name, int price, String urlImage, String description, int favorite) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.price = price;
         this.urlImage = urlImage;
-        this.totalFavorite = totalFavorite;
-        this.quatity = quatity;
+        this.description = description;
+        this.favorite = favorite;
     }
 
     public String getId() {
@@ -40,14 +38,6 @@ public class Menu {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -64,19 +54,19 @@ public class Menu {
         this.urlImage = urlImage;
     }
 
-    public int getTotalOrder() {
-        return totalFavorite;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTotalOrder(int totalOrder) {
-        this.totalFavorite = totalOrder;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public int getQuatity() {
-        return quatity;
+    public int getFavorite() {
+        return favorite;
     }
 
-    public void setQuatity(int quatity) {
-        this.quatity = quatity;
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
     }
 }

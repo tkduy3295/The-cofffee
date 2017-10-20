@@ -12,21 +12,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="/home/sung/.android/build-cache/5f2b92fdfa68394aa986df3a25f4de1556971bad/output/jars/classes.jar"
+        jar="/home/sung/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.1/2a8e0aa38a2e21cb39e2f5a7d6704cbdc941da0/gson-2.8.1.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
-        sha1="3abb4b88f5a8a0584a9b01d3170d7165f12f8588">
-        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_2b2fd05561ec873df8a6ceb06ca4a621b39e6019.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/sung/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
-        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/picasso-2.5.2_b9172d9ae13097870cdbd8e3f3c2ecb407cc13fe.jar" />
+        sha1="02a8e0aa38a2e21cb39e2f5a7d6704cbdc941da0">
+        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/gson-2.8.1_65cb3b8b6a8ea11f0d0fbcdbdd9148809796d7e3.jar" />
     </item>
     <item
         is-multidex="false"
@@ -36,15 +27,6 @@
         revision="25.0.0"
         sha1="f8efd0096475e0daf054267b61544e10dc776503">
         <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_2d6e2a8df8b4bc2b02ec39136bb3f4e353966976.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/sung/.android/build-cache/cd008a4269e3697efa16ce5b3fbe1e84a21a5a1e/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="1821601ddbec5ff125653097812823388700af74">
-        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_bf39b75f8d36f34725bf6fc6f2db48e469e44704.jar" />
     </item>
     <item
         is-multidex="false"
@@ -66,21 +48,48 @@
     </item>
     <item
         is-multidex="false"
-        jar="/home/sung/.android/build-cache/f3edb251af926e97ef4ea27797d79bde12929248/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e653e15e62e8a59ddd76cc7f827bf8bce38ae7bb">
-        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_d73589644bb732a93883240da8f32bd72021922f.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="/home/sung/.android/build-cache/c62684ec9cab6ac077779aaa483f1d2ee0d69952/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
         <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_9bc9a1261c6225e3935c16c3558d99113a759adc.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sung/.android/build-cache/5f2b92fdfa68394aa986df3a25f4de1556971bad/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3abb4b88f5a8a0584a9b01d3170d7165f12f8588">
+        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_2b2fd05561ec873df8a6ceb06ca4a621b39e6019.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sung/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/picasso-2.5.2_b9172d9ae13097870cdbd8e3f3c2ecb407cc13fe.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sung/.android/build-cache/cd008a4269e3697efa16ce5b3fbe1e84a21a5a1e/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="1821601ddbec5ff125653097812823388700af74">
+        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_bf39b75f8d36f34725bf6fc6f2db48e469e44704.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sung/.android/build-cache/f3edb251af926e97ef4ea27797d79bde12929248/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e653e15e62e8a59ddd76cc7f827bf8bce38ae7bb">
+        <dex dex="/home/sung/AndroidStudioProjects/Design-Demo/app/build/intermediates/pre-dexed/debug/classes_d73589644bb732a93883240da8f32bd72021922f.jar" />
     </item>
     <item
         is-multidex="false"
