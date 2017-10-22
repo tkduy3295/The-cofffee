@@ -49,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
     private int _xDelta;
     private int _yDelta;
 
-    private List<String> listOrder = new ArrayList<String>();
 
     String urlGetTable = "https://cappuccino-hello.herokuapp.com/api/table/";
+
+    private Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,19 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getTable();
+
+        login = (Button) findViewById(R.id.login);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,LogoActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
 
     }
 

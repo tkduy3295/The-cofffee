@@ -26,6 +26,12 @@
             android:name=".ReceiptActivity"
             android:label="@string/title_activity_receipt"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ForgotPWActivity" />
+        <activity android:name=".LogoActivity"></activity>
     </application>
 
 </manifest>

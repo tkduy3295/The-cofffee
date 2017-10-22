@@ -36,6 +36,7 @@
 
     <string name="btnPayment">ceceipt </string>
     <string name="title_activity_receipt">Phiếu thanh toán</string>
+    <string name="title_activity_login">Sign in</string>
 
 
 </resources>

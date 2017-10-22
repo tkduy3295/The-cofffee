@@ -12,8 +12,12 @@
     <!--<color name="nameMenu">#403B40</color>-->
 
     <color name="highlight">#e5e5e5</color>
+    <color name="account">#7f7f7f</color>
 
     <color name="red">#FF0000</color>
+    <color name="black">#000000</color>
+
+
 
 
 
